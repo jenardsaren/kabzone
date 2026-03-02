@@ -1,0 +1,100 @@
+<x-app-layout>
+    <x-slot name="header">
+        <h2 class="text-xl font-semibold text-gray-900">Create Session</h2>
+    </x-slot>
+
+    <div class="py-8">
+        <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+            <div class="mb-4 rounded-md border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
+                Operating hours: Mon-Fri 8:00 AM-6:00 PM, Sun 1:00 PM-6:00 PM, Sat closed. Sessions are hourly slots.
+            </div>
+
+            <div class="rounded-lg bg-white p-6 shadow-sm" x-data="{ mode: '{{ old('schedule_mode', 'single') }}' }">
+                <form method="POST" action="{{ route('front-desk.sessions.store') }}" class="space-y-4">
+                    @csrf
+
+                    <div class="grid gap-4 sm:grid-cols-2">
+                        <div>
+                            <x-input-label for="date" :value="__('Date')" />
+                            <x-text-input id="date" name="date" type="date" class="mt-1 block w-full" :value="old('date')" required />
+                            <x-input-error :messages="$errors->get('date')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="time" :value="__('Time')" />
+                            <x-text-input id="time" name="time" type="time" class="mt-1 block w-full" step="3600" :value="old('time')" required />
+                            <x-input-error :messages="$errors->get('time')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="type" :value="__('Type')" />
+                            <select id="type" name="type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="initial" @selected(old('type') === 'initial')>Initial</option>
+                                <option value="regular" @selected(old('type', 'regular') === 'regular')>Regular</option>
+                            </select>
+                            <x-input-error :messages="$errors->get('type')" class="mt-2" />
+                        </div>
+
+                        <div>
+                            <x-input-label for="therapist_id" :value="__('Therapist')" />
+                            <select id="therapist_id" name="therapist_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="">Select therapist</option>
+                                @foreach ($therapists as $therapist)
+                                    <option value="{{ $therapist->id }}" @selected((int) old('therapist_id') === $therapist->id)>
+                                        {{ $therapist->full_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('therapist_id')" class="mt-2" />
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <x-input-label for="client_id" :value="__('Client')" />
+                            <select id="client_id" name="client_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="">Select client</option>
+                                @foreach ($clients as $client)
+                                    <option value="{{ $client->id }}" @selected((int) old('client_id') === $client->id)>
+                                        {{ $client->full_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('client_id')" class="mt-2" />
+                        </div>
+
+                        <div class="sm:col-span-2">
+                            <x-input-label for="description" :value="__('Description')" />
+                            <textarea id="description" name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('description') }}</textarea>
+                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                        </div>
+                    </div>
+
+                    <div>
+                        <x-input-label :value="__('Schedule Mode')" />
+                        <div class="mt-2 flex gap-4">
+                            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                                <input type="radio" name="schedule_mode" value="single" x-model="mode" @checked(old('schedule_mode', 'single') === 'single')>
+                                Single
+                            </label>
+                            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                                <input type="radio" name="schedule_mode" value="repeat" x-model="mode" @checked(old('schedule_mode') === 'repeat')>
+                                Repeat Daily
+                            </label>
+                        </div>
+                        <x-input-error :messages="$errors->get('schedule_mode')" class="mt-2" />
+                    </div>
+
+                    <div x-show="mode === 'repeat'" x-cloak>
+                        <x-input-label for="repeat_days" :value="__('Repeat Days (max 30)')" />
+                        <x-text-input id="repeat_days" name="repeat_days" type="number" min="1" max="30" class="mt-1 block w-full" :value="old('repeat_days', 7)" />
+                        <x-input-error :messages="$errors->get('repeat_days')" class="mt-2" />
+                    </div>
+
+                    <div class="flex items-center gap-3">
+                        <x-primary-button>Create Session</x-primary-button>
+                        <a href="{{ route('front-desk.dashboard') }}" class="text-sm text-gray-600 hover:text-gray-900">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
