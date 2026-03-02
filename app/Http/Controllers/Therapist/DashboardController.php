@@ -12,18 +12,36 @@ class DashboardController extends Controller
 {
     public function index(): View
     {
-        $today = CarbonImmutable::now(SessionSchedulerService::TIMEZONE)->toDateString();
+        $now = CarbonImmutable::now(SessionSchedulerService::TIMEZONE);
+        $today = $now->toDateString();
+        $tomorrow = $now->addDay()->toDateString();
+        $yesterday = $now->subDay()->toDateString();
 
-        $sessions = auth()->user()
+        $therapistSessions = auth()->user()
             ->therapistSessions()
-            ->with(['client', 'assistant'])
+            ->with(['client', 'assistant']);
+
+        $todayPendingSessions = (clone $therapistSessions)
             ->whereDate('date', $today)
             ->where('status', SessionStatus::Pending->value)
             ->recent()
             ->get();
 
+        $upcomingSessions = (clone $therapistSessions)
+            ->whereDate('date', '>=', $tomorrow)
+            ->orderBy('date')
+            ->orderBy('time')
+            ->get();
+
+        $pastSessions = (clone $therapistSessions)
+            ->whereDate('date', '<=', $yesterday)
+            ->recent()
+            ->get();
+
         return view('therapist.dashboard', [
-            'sessions' => $sessions,
+            'todayPendingSessions' => $todayPendingSessions,
+            'upcomingSessions' => $upcomingSessions,
+            'pastSessions' => $pastSessions,
         ]);
     }
 }
