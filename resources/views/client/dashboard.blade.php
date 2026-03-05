@@ -15,7 +15,6 @@
                                 <th class="px-3 py-2">Date</th>
                                 <th class="px-3 py-2">Time</th>
                                 <th class="px-3 py-2">Therapist</th>
-                                <th class="px-3 py-2">Assistant</th>
                                 <th class="px-3 py-2">Type</th>
                                 <th class="px-3 py-2">Action</th>
                             </tr>
@@ -26,7 +25,6 @@
                                     <td class="px-3 py-2">{{ $session->date->format('M d, Y') }}</td>
                                     <td class="px-3 py-2">{{ $session->formatted_time }}</td>
                                     <td class="px-3 py-2">{{ $session->therapist?->full_name }}</td>
-                                    <td class="px-3 py-2">{{ $session->assistant?->full_name ?? 'Unassigned' }}</td>
                                     <td class="px-3 py-2">{{ str($session->type->value)->headline() }}</td>
                                     <td class="px-3 py-2">
                                         <a href="{{ route('client.sessions.show', $session) }}" class="text-indigo-600 hover:text-indigo-500">View</a>
@@ -34,7 +32,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="6" class="px-3 py-6 text-center text-gray-500">No completed sessions yet.</td>
+                                    <td colspan="5" class="px-3 py-6 text-center text-gray-500">No completed sessions yet.</td>
                                 </tr>
                             @endforelse
                         </tbody>

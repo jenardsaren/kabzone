@@ -19,6 +19,7 @@ class SessionNoteController extends Controller
             'ef' => $this->efFields($request),
             'ei' => $this->eiFields($request),
             'plan' => $this->planFields($request),
+            'approval' => $this->approvalFields($request),
             default => [],
         };
 
@@ -86,6 +87,17 @@ class SessionNoteController extends Controller
         $values = [];
 
         foreach (Note::PLAN_TEXT_FIELDS as $field) {
+            $values[$field] = $this->trimmedText($request->input($field));
+        }
+
+        return $values;
+    }
+
+    private function approvalFields(SessionNoteRequest $request): array
+    {
+        $values = [];
+
+        foreach (Note::APPROVAL_TEXT_FIELDS as $field) {
             $values[$field] = $this->trimmedText($request->input($field));
         }
 

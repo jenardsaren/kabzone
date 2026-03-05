@@ -21,9 +21,8 @@ class DashboardController extends Controller
             ->therapistSessions()
             ->with(['client', 'assistant']);
 
-        $todayPendingSessions = (clone $therapistSessions)
+        $todaySessions = (clone $therapistSessions)
             ->whereDate('date', $today)
-            ->where('status', SessionStatus::Pending->value)
             ->recent()
             ->get();
 
@@ -39,7 +38,7 @@ class DashboardController extends Controller
             ->get();
 
         return view('therapist.dashboard', [
-            'todayPendingSessions' => $todayPendingSessions,
+            'todaySessions' => $todaySessions,
             'upcomingSessions' => $upcomingSessions,
             'pastSessions' => $pastSessions,
         ]);

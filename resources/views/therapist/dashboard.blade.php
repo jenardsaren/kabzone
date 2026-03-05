@@ -6,9 +6,9 @@
     <div class="py-8">
         <div class="mx-auto max-w-7xl space-y-6 px-4 sm:px-6 lg:px-8">
             @include('therapist.partials.sessions-table', [
-                'title' => "Today's Pending Sessions",
-                'sessions' => $todayPendingSessions,
-                'emptyMessage' => 'No pending sessions today.',
+                'title' => "Today's Sessions",
+                'sessions' => $todaySessions,
+                'emptyMessage' => 'No sessions scheduled for today.',
             ])
 
             @include('therapist.partials.sessions-table', [

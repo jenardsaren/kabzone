@@ -228,6 +228,7 @@ return new class extends Migration
             $table->text('ei_play_specify')->nullable();
             $table->text('ei_play_remarks')->nullable();
             $table->text('plan')->nullable();
+            $table->text('approval_signature')->nullable();
             $table->timestamps();
 
             $table->unique('session_id');

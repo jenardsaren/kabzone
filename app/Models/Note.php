@@ -242,6 +242,10 @@ class Note extends Model
         'plan',
     ];
 
+    public const APPROVAL_TEXT_FIELDS = [
+        'approval_signature',
+    ];
+
     /**
      * @var list<string>
      */
@@ -257,6 +261,7 @@ class Note extends Model
         ...self::EI_BOOLEAN_FIELDS,
         ...self::EI_INTEGER_FIELDS,
         ...self::PLAN_TEXT_FIELDS,
+        ...self::APPROVAL_TEXT_FIELDS,
     ];
 
     protected function casts(): array

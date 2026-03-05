@@ -101,3 +101,28 @@ it('only updates plan column when note_section is plan', function (): void {
     expect($note->ei_visual_discrimination)->toBeTrue();
     expect($note->plan)->toBe('Updated plan');
 });
+
+it('only updates approval signature when note_section is approval', function (): void {
+    $therapist = signInAs(UserRole::Therapist, ['must_change_password' => false]);
+    $client = makeUser(UserRole::Client);
+
+    $session = Session::factory()->create([
+        'therapist_id' => $therapist->id,
+        'client_id' => $client->id,
+    ]);
+
+    $session->note()->create([
+        'plan' => 'Old plan',
+        'approval_signature' => null,
+    ]);
+
+    $this->patch(route('therapist.sessions.notes.update', $session), [
+        'note_section' => 'approval',
+        'approval_signature' => 'data:image/png;base64,abc',
+    ])->assertRedirect();
+
+    $note = $session->refresh()->note;
+
+    expect($note->plan)->toBe('Old plan');
+    expect($note->approval_signature)->toBe('data:image/png;base64,abc');
+});

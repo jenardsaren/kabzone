@@ -26,7 +26,7 @@ class SessionNoteRequest extends FormRequest
     public function rules(): array
     {
         $rules = [
-            'note_section' => ['required', Rule::in(['behavior', 'activities', 'ef', 'ei', 'plan'])],
+            'note_section' => ['required', Rule::in(['behavior', 'activities', 'ef', 'ei', 'plan', 'approval'])],
             'bo_other_details' => ['nullable', 'string', 'max:500'],
             'am_activities_and_management' => ['nullable', 'string', 'max:500'],
         ];
@@ -53,6 +53,10 @@ class SessionNoteRequest extends FormRequest
 
         foreach (Note::PLAN_TEXT_FIELDS as $field) {
             $rules[$field] = ['nullable', 'string', 'max:500'];
+        }
+
+        foreach (Note::APPROVAL_TEXT_FIELDS as $field) {
+            $rules[$field] = ['nullable', 'string', 'max:65000'];
         }
 
         return $rules;
