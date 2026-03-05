@@ -92,13 +92,26 @@
                                 <input type="radio" name="schedule_mode" value="repeat" x-model="mode" @checked(old('schedule_mode') === 'repeat')>
                                 Repeat Daily
                             </label>
+                            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                                <input type="radio" name="schedule_mode" value="repeat_weekly" x-model="mode" @checked(old('schedule_mode') === 'repeat_weekly')>
+                                Repeat Weekly
+                            </label>
                         </div>
                         <x-input-error :messages="$errors->get('schedule_mode')" class="mt-2" />
                     </div>
 
-                    <div x-show="mode === 'repeat'" x-cloak>
-                        <x-input-label for="repeat_days" :value="__('Repeat Days (max 30)')" />
-                        <x-text-input id="repeat_days" name="repeat_days" type="number" min="1" max="30" class="mt-1 block w-full" :value="old('repeat_days', 7)" />
+                    <div x-show="mode !== 'single'" x-cloak>
+                        <x-input-label for="repeat_days" :value="__('Repeat Days (max 30)')" x-show="mode === 'repeat'" />
+                        <x-input-label for="repeat_days" :value="__('Repeat Weeks (max 12)')" x-show="mode === 'repeat_weekly'" />
+                        <x-text-input
+                            id="repeat_days"
+                            name="repeat_days"
+                            type="number"
+                            min="1"
+                            x-bind:max="mode === 'repeat_weekly' ? 12 : 30"
+                            class="mt-1 block w-full"
+                            :value="old('repeat_days', 7)"
+                        />
                         <x-input-error :messages="$errors->get('repeat_days')" class="mt-2" />
                     </div>
 

@@ -41,8 +41,18 @@ class StoreSessionRequest extends FormRequest
             'therapist_id' => ['required', 'integer', Rule::exists('users', 'id')],
             'assistant_id' => ['nullable', 'integer', Rule::exists('users', 'id')],
             'description' => ['nullable', 'string'],
-            'schedule_mode' => ['required', Rule::in(['single', 'repeat'])],
-            'repeat_days' => ['nullable', 'integer', 'min:1', 'max:30', Rule::requiredIf($this->input('schedule_mode') === 'repeat')],
+            'schedule_mode' => ['required', Rule::in(['single', 'repeat', 'repeat_weekly'])],
+            'repeat_days' => [
+                'nullable',
+                'integer',
+                'min:1',
+                Rule::requiredIf($this->input('schedule_mode') !== 'single'),
+                Rule::when(
+                    $this->input('schedule_mode') === 'repeat_weekly',
+                    ['max:12'],
+                    ['max:30']
+                ),
+            ],
         ];
     }
 

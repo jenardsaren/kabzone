@@ -46,3 +46,26 @@ it('creates repeat schedules while skipping conflicts', function (): void {
     expect($result['skipped'])->toHaveCount(1);
     expect($result['skipped'][0]['date'])->toBe('2026-03-03');
 });
+
+it('creates weekly schedules based on the starting weekday', function (): void {
+    $service = app(SessionSchedulerService::class);
+
+    $client = makeUser(UserRole::Client);
+    $therapist = makeUser(UserRole::Therapist);
+
+    $result = $service->schedule([
+        'date' => '2026-03-02',
+        'time' => '10:00',
+        'type' => SessionType::Regular->value,
+        'client_id' => $client->id,
+        'therapist_id' => $therapist->id,
+        'description' => 'Weekly plan',
+        'schedule_mode' => 'repeat_weekly',
+        'repeat_days' => 3,
+    ]);
+
+    expect($result['created'])->toHaveCount(3);
+    expect($result['created'][0]->date->toDateString())->toBe('2026-03-02');
+    expect($result['created'][1]->date->toDateString())->toBe('2026-03-09');
+    expect($result['created'][2]->date->toDateString())->toBe('2026-03-16');
+});

@@ -145,6 +145,28 @@ it('creates repeat schedules and skips conflicted dates', function (): void {
     expect(Session::query()->where('client_id', $client->id)->whereDate('date', '2026-03-04')->exists())->toBeTrue();
 });
 
+it('creates repeat weekly schedules', function (): void {
+    signInAs(UserRole::FrontDesk, ['must_change_password' => false]);
+
+    $client = makeUser(UserRole::Client);
+    $therapist = makeUser(UserRole::Therapist);
+
+    $this->post(route('front-desk.sessions.store'), [
+        'date' => '2026-03-02',
+        'time' => '10:00',
+        'type' => SessionType::Regular->value,
+        'client_id' => $client->id,
+        'therapist_id' => $therapist->id,
+        'description' => 'Weekly plan',
+        'schedule_mode' => 'repeat_weekly',
+        'repeat_days' => 3,
+    ])->assertRedirect(route('front-desk.dashboard', absolute: false));
+
+    expect(Session::query()->where('client_id', $client->id)->count())->toBe(3);
+    expect(Session::query()->where('client_id', $client->id)->whereDate('date', '2026-03-09')->exists())->toBeTrue();
+    expect(Session::query()->where('client_id', $client->id)->whereDate('date', '2026-03-16')->exists())->toBeTrue();
+});
+
 it('allows front desk to update pending session schedule fields', function (): void {
     $frontDesk = signInAs(UserRole::FrontDesk, ['must_change_password' => false]);
     $client = makeUser(UserRole::Client);

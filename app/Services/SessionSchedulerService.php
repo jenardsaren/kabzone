@@ -137,7 +137,11 @@ class SessionSchedulerService
         $dates = [];
 
         for ($index = 0; $index < $repeatDays; $index++) {
-            $dates[] = $startDate->addDays($index);
+            if ($data['schedule_mode'] === 'repeat_weekly') {
+                $dates[] = $startDate->addWeeks($index);
+            } else {
+                $dates[] = $startDate->addDays($index);
+            }
         }
 
         return $dates;
