@@ -54,7 +54,7 @@ class SessionSchedulerService
                     continue;
                 }
 
-                $created->push(Session::query()->create([
+                $session = Session::query()->create([
                     'date' => $date->toDateString(),
                     'time' => $this->normalizeTimeValue($data['time']),
                     'type' => $data['type'],
@@ -63,7 +63,22 @@ class SessionSchedulerService
                     'assistant_id' => $data['assistant_id'] ?? null,
                     'description' => $data['description'] ?? null,
                     'status' => SessionStatus::Pending,
-                ]));
+                ]);
+
+                $session->note()->create([
+                    'content' => null,
+                    'bo_cooperative' => null,
+                    'bo_calm_regulated' => null,
+                    'bo_restless_fidgety' => null,
+                    'bo_easily_frustrated' => null,
+                    'bo_tantrums' => null,
+                    'bo_meltdowns' => null,
+                    'bo_avoidant' => null,
+                    'bo_aggressive' => null,
+                    'bo_other' => null,
+                    'bo_other_details' => null,
+                ]);
+                $created->push($session);
             }
         });
 

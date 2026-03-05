@@ -52,7 +52,7 @@ class SessionController extends Controller
     {
         $this->authorize('view', $session);
 
-        $session->load(['client', 'therapist', 'assistant', 'tasks']);
+        $session->load(['client', 'therapist', 'assistant', 'tasks', 'note']);
 
         return view('admin.sessions.show', [
             'session' => $session,

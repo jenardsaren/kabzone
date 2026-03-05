@@ -2,7 +2,7 @@
 
 use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\SessionController as AdminSessionController;
-use App\Http\Controllers\Admin\StaffController as StaffController;
+use App\Http\Controllers\Admin\StaffController;
 use App\Http\Controllers\Assistant\DashboardController as AssistantDashboardController;
 use App\Http\Controllers\Assistant\SessionController as AssistantSessionController;
 use App\Http\Controllers\Auth\RequiredPasswordChangeController;
@@ -13,6 +13,7 @@ use App\Http\Controllers\FrontDesk\ClientController;
 use App\Http\Controllers\FrontDesk\DashboardController as FrontDeskDashboardController;
 use App\Http\Controllers\FrontDesk\SessionController as FrontDeskSessionController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\SessionNoteController;
 use App\Http\Controllers\Therapist\DashboardController as TherapistDashboardController;
 use App\Http\Controllers\Therapist\SessionController as TherapistSessionController;
 use Illuminate\Support\Facades\Route;
@@ -61,6 +62,7 @@ Route::middleware(['auth', 'password.changed', 'role:admin'])->prefix('admin')->
     Route::get('sessions/{session}', [AdminSessionController::class, 'show'])->name('sessions.show');
     Route::get('sessions/{session}/edit', [AdminSessionController::class, 'edit'])->name('sessions.edit');
     Route::patch('sessions/{session}', [AdminSessionController::class, 'update'])->name('sessions.update');
+    Route::patch('sessions/{session}/notes', [SessionNoteController::class, 'update'])->name('sessions.notes.update');
 });
 
 Route::middleware(['auth', 'password.changed', 'role:therapist'])->prefix('therapist')->name('therapist.')->group(function (): void {
@@ -71,6 +73,7 @@ Route::middleware(['auth', 'password.changed', 'role:therapist'])->prefix('thera
     Route::patch('sessions/{session}/status', [TherapistSessionController::class, 'updateStatus'])->name('sessions.status.update');
     Route::post('sessions/{session}/tasks', [TherapistSessionController::class, 'storeTask'])->name('sessions.tasks.store');
     Route::patch('sessions/{session}/tasks/{task}', [TherapistSessionController::class, 'updateTask'])->name('sessions.tasks.update');
+    Route::patch('sessions/{session}/notes', [SessionNoteController::class, 'update'])->name('sessions.notes.update');
 });
 
 Route::middleware(['auth', 'password.changed', 'role:assistant'])->prefix('assistant')->name('assistant.')->group(function (): void {
