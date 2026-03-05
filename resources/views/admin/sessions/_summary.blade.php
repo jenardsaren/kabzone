@@ -121,7 +121,7 @@
                 </div>
             </details>
 
-            <details open class="group p-4">
+            <details class="group p-4">
                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
                     <span>EI Session Notes</span>
                     <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -136,7 +136,7 @@
                 </div>
             </details>
 
-            <details open class="group p-4">
+            <details class="group p-4">
                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
                     <span>EF Session Notes</span>
                     <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
