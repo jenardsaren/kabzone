@@ -11,8 +11,8 @@ it('validates operating-hour boundaries', function (): void {
     $service = app(SessionSchedulerService::class);
 
     expect($service->isWithinOperatingHours(CarbonImmutable::parse('2026-03-02', 'Asia/Manila'), '08:00'))->toBeTrue();
-    expect($service->isWithinOperatingHours(CarbonImmutable::parse('2026-03-02', 'Asia/Manila'), '17:00'))->toBeTrue();
-    expect($service->isWithinOperatingHours(CarbonImmutable::parse('2026-03-02', 'Asia/Manila'), '18:00'))->toBeFalse();
+    expect($service->isWithinOperatingHours(CarbonImmutable::parse('2026-03-02', 'Asia/Manila'), '18:00'))->toBeTrue();
+    expect($service->isWithinOperatingHours(CarbonImmutable::parse('2026-03-02', 'Asia/Manila'), '21:00'))->toBeFalse();
     expect($service->isWithinOperatingHours(CarbonImmutable::parse('2026-03-07', 'Asia/Manila'), '10:00'))->toBeFalse();
     expect($service->isWithinOperatingHours(CarbonImmutable::parse('2026-03-08', 'Asia/Manila'), '13:00'))->toBeTrue();
 });

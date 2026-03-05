@@ -28,7 +28,7 @@ Core business outcomes:
 - Calendar: FullCalendar.
 - Notifications: out of v1 scope.
 - Timezone: `Asia/Manila`.
-- Operating hours: Mon–Fri 8:00 AM–6:00 PM, Sun 1:00 PM–6:00 PM, Sat closed.
+- Operating hours: Mon–Fri 8:00 AM–8:00 PM, Sun 1:00 PM–8:00 PM, Sat closed.
 
 ## 3. In Scope / Out of Scope
 In scope:

@@ -93,10 +93,10 @@ class SessionSchedulerService
         }
 
         if ($date->dayOfWeekIso === CarbonInterface::SUNDAY) {
-            return $hour >= 13 && $hour <= 17;
+            return $hour >= 13 && $hour <= 20;
         }
 
-        return $hour >= 8 && $hour <= 17;
+        return $hour >= 8 && $hour <= 20;
     }
 
     public function hasConflict(CarbonInterface $date, string $time, int $therapistId, int $clientId): bool

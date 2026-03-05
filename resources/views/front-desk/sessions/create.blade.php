@@ -6,7 +6,7 @@
     <div class="py-8">
         <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
             <div class="mb-4 rounded-md border border-blue-200 bg-blue-50 px-4 py-3 text-sm text-blue-800">
-                Operating hours: Mon-Fri 8:00 AM-6:00 PM, Sun 1:00 PM-6:00 PM, Sat closed. Sessions are hourly slots.
+                Operating hours: Mon-Fri 8:00 AM-8:00 PM, Sun 1:00 PM-8:00 PM, Sat closed. Sessions are hourly slots.
             </div>
 
             <div class="rounded-lg bg-white p-6 shadow-sm" x-data="{ mode: '{{ old('schedule_mode', 'single') }}' }">
