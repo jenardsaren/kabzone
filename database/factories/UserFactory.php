@@ -5,10 +5,11 @@ namespace Database\Factories;
 use App\Enums\Gender;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
-use InvalidArgumentException;
+use Carbon\CarbonImmutable;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
+use InvalidArgumentException;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
@@ -22,6 +23,8 @@ class UserFactory extends Factory
      */
     public function definition(): array
     {
+        $dateOfBirth = CarbonImmutable::instance(fake()->dateTimeBetween('-90 years', '-5 years'));
+
         return [
             'first_name' => fake()->firstName(),
             'middle_name' => fake()->optional()->firstName(),
@@ -29,6 +32,8 @@ class UserFactory extends Factory
             'address' => fake()->address(),
             'contact_no' => fake()->phoneNumber(),
             'gender' => fake()->randomElement(Gender::values()),
+            'date_of_birth' => $dateOfBirth->toDateString(),
+            'age' => CarbonImmutable::now()->diffInYears($dateOfBirth),
             'status' => UserStatus::Active,
             'parent_name' => fake()->name(),
             'email' => fake()->unique()->safeEmail(),

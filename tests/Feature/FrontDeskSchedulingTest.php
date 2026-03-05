@@ -15,6 +15,8 @@ it('allows front desk to create client accounts', function (): void {
         'address' => '123 Main St',
         'contact_no' => '09170000000',
         'gender' => 'male',
+        'date_of_birth' => '2010-01-01',
+        'age' => 14,
         'parent_name' => 'Parent Name',
         'email' => 'new-client@example.com',
     ])->assertRedirect();
@@ -35,6 +37,8 @@ it('requires parent name when front desk creates a client', function (): void {
         'address' => '123 Main St',
         'contact_no' => '09170000000',
         'gender' => 'male',
+        'date_of_birth' => '2010-01-01',
+        'age' => 14,
         'parent_name' => '',
         'email' => 'new-client@example.com',
     ])->assertSessionHasErrors('parent_name');

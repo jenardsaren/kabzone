@@ -56,7 +56,6 @@ class StoreSessionRequest extends FormRequest
             $scheduler = app(SessionSchedulerService::class);
             $client = User::query()->find((int) $this->integer('client_id'));
             $therapist = User::query()->find((int) $this->integer('therapist_id'));
-            $assistant = User::query()->find((int) $this->integer('assistant_id'));
 
             if (! $client instanceof User || ! $client->isRole(UserRole::Client) || $client->status !== UserStatus::Active) {
                 $validator->errors()->add('client_id', 'The selected client must be an active client account.');
@@ -66,8 +65,12 @@ class StoreSessionRequest extends FormRequest
                 $validator->errors()->add('therapist_id', 'The selected therapist must be an active therapist account.');
             }
 
-            if (! $assistant instanceof User || ! $assistant->isRole(UserRole::Assistant) || $assistant->status !== UserStatus::Active) {
-                $validator->errors()->add('assistant_id', 'The selected assistant must be an active assistant account.');
+            if ($this->input('assistant_id') !== null) {
+                $assistant = User::query()->find((int) $this->integer('assistant_id'));
+
+                if (! $assistant instanceof User || ! $assistant->isRole(UserRole::Assistant) || $assistant->status !== UserStatus::Active) {
+                    $validator->errors()->add('assistant_id', 'The selected assistant must be an active assistant account.');
+                }
             }
 
             $date = CarbonImmutable::parse($this->string('date')->toString(), SessionSchedulerService::TIMEZONE);

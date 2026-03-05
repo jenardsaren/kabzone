@@ -28,6 +28,8 @@ class User extends Authenticatable
         'contact_no',
         'gender',
         'status',
+        'date_of_birth',
+        'age',
         'parent_name',
         'email',
         'password',
@@ -59,6 +61,8 @@ class User extends Authenticatable
             'role' => UserRole::class,
             'status' => UserStatus::class,
             'must_change_password' => 'bool',
+            'date_of_birth' => 'date',
+            'age' => 'int',
         ];
     }
 

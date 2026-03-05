@@ -45,6 +45,35 @@
         <x-input-error :messages="$errors->get('gender')" class="mt-2" />
     </div>
 
+    <div>
+        <x-input-label for="date_of_birth" :value="__('Date of Birth')" />
+        <x-text-input
+            id="date_of_birth"
+            name="date_of_birth"
+            type="date"
+            class="mt-1 block w-full"
+            :value="old('date_of_birth', $client?->date_of_birth?->format('Y-m-d'))"
+            required
+        />
+        <x-input-error :messages="$errors->get('date_of_birth')" class="mt-2" />
+    </div>
+
+    <div>
+        <x-input-label for="age" :value="__('Age')" />
+        <x-text-input
+            id="age"
+            name="age"
+            type="number"
+            min="0"
+            max="120"
+            inputmode="numeric"
+            class="mt-1 block w-full"
+            :value="old('age', $client?->age)"
+            required
+        />
+        <x-input-error :messages="$errors->get('age')" class="mt-2" />
+    </div>
+
     <div class="sm:col-span-2">
         <x-input-label for="address" :value="__('Address')" />
         <x-text-input id="address" name="address" type="text" class="mt-1 block w-full" :value="old('address', $client?->address)" required />
