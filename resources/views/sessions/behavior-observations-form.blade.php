@@ -6,7 +6,7 @@
 
     <input type="hidden" name="note_section" value="behavior">
     <div x-data="{ showOther: {{ $note?->bo_other ? 'true' : 'false' }} }">
-        <p class="text-sm font-semibold uppercase tracking-wide text-gray-600">Observations</p>
+        <p class="text-sm font-semibold tracking-wide text-gray-600">Observations</p>
 
         <div class="mt-3 grid gap-3 md:grid-cols-2 lg:grid-cols-3">
             @foreach ([

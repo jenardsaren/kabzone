@@ -126,6 +126,122 @@ class Note extends Model
         'ef_cognitive_specify',
     ];
 
+    public const EI_BOOLEAN_FIELDS = [
+        'ei_sensory_arousal_under',
+        'ei_sensory_arousal_regulated',
+        'ei_sensory_arousal_over',
+        'ei_sensory_pattern_seeking',
+        'ei_sensory_pattern_avoidant',
+        'ei_sensory_pattern_mixed',
+        'ei_regulation_movement',
+        'ei_regulation_calming',
+        'ei_regulation_heavy_work',
+        'ei_regulation_sensory_break',
+        'ei_regulation_independent',
+        'ei_gross_motor_assistance_independent',
+        'ei_gross_motor_assistance_hoha',
+        'ei_gross_motor_assistance_model',
+        'ei_gross_motor_assistance_trial_and_error',
+        'ei_gross_motor_assistance_prompts',
+        'ei_gross_motor_assistance_cues',
+        'ei_gross_motor_assistance_level_maximal',
+        'ei_gross_motor_assistance_level_moderate',
+        'ei_gross_motor_assistance_level_minimal',
+        'ei_gross_motor_assistance_type_physical',
+        'ei_gross_motor_assistance_type_gestural',
+        'ei_gross_motor_assistance_type_visual',
+        'ei_gross_motor_assistance_type_verbal',
+        'ei_fine_motor_assistance_independent',
+        'ei_fine_motor_assistance_hoha',
+        'ei_fine_motor_assistance_model',
+        'ei_fine_motor_assistance_trial_and_error',
+        'ei_fine_motor_assistance_prompts',
+        'ei_fine_motor_assistance_cues',
+        'ei_fine_motor_assistance_level_maximal',
+        'ei_fine_motor_assistance_level_moderate',
+        'ei_fine_motor_assistance_level_minimal',
+        'ei_fine_motor_assistance_type_physical',
+        'ei_fine_motor_assistance_type_gestural',
+        'ei_fine_motor_assistance_type_visual',
+        'ei_fine_motor_assistance_type_verbal',
+        'ei_work_behavior_assistance_independent',
+        'ei_work_behavior_assistance_hoha',
+        'ei_work_behavior_assistance_model',
+        'ei_work_behavior_assistance_trial_and_error',
+        'ei_work_behavior_assistance_prompts',
+        'ei_work_behavior_assistance_cues',
+        'ei_work_behavior_assistance_level_maximal',
+        'ei_work_behavior_assistance_level_moderate',
+        'ei_work_behavior_assistance_level_minimal',
+        'ei_work_behavior_assistance_type_physical',
+        'ei_work_behavior_assistance_type_gestural',
+        'ei_work_behavior_assistance_type_visual',
+        'ei_work_behavior_assistance_type_verbal',
+        'ei_cognitive_msri',
+        'ei_cognitive_joint_attention',
+        'ei_cognitive_imitation',
+        'ei_cognitive_concepts',
+        'ei_cognitive_follow_commands',
+        'ei_cognitive_assistance_independent',
+        'ei_cognitive_assistance_hoha',
+        'ei_cognitive_assistance_model',
+        'ei_cognitive_assistance_trial_and_error',
+        'ei_cognitive_assistance_prompts',
+        'ei_cognitive_assistance_cues',
+        'ei_cognitive_assistance_level_maximal',
+        'ei_cognitive_assistance_level_moderate',
+        'ei_cognitive_assistance_level_minimal',
+        'ei_cognitive_assistance_type_physical',
+        'ei_cognitive_assistance_type_gestural',
+        'ei_cognitive_assistance_type_visual',
+        'ei_cognitive_assistance_type_verbal',
+        'ei_visual_discrimination',
+        'ei_visual_form_constancy',
+        'ei_visual_memory',
+        'ei_visual_sequential_memory',
+        'ei_visual_spatial_relations',
+        'ei_visual_figure_ground',
+        'ei_visual_closure',
+        'ei_visual_assistance_independent',
+        'ei_visual_assistance_hoha',
+        'ei_visual_assistance_model',
+        'ei_visual_assistance_trial_and_error',
+        'ei_visual_assistance_prompts',
+        'ei_visual_assistance_cues',
+        'ei_visual_assistance_level_maximal',
+        'ei_visual_assistance_level_moderate',
+        'ei_visual_assistance_level_minimal',
+        'ei_visual_assistance_type_physical',
+        'ei_visual_assistance_type_gestural',
+        'ei_visual_assistance_type_visual',
+        'ei_visual_assistance_type_verbal',
+    ];
+
+    public const EI_INTEGER_FIELDS = [
+        'ei_work_behavior_frustration_tolerance',
+        'ei_work_behavior_impulse_control',
+        'ei_work_behavior_compliance',
+    ];
+
+    public const EI_TEXT_FIELDS = [
+        'ei_sensory_remarks',
+        'ei_gross_motor_specify',
+        'ei_gross_motor_remarks',
+        'ei_fine_motor_specify',
+        'ei_fine_motor_remarks',
+        'ei_work_behavior_remarks',
+        'ei_cognitive_remarks',
+        'ei_visual_remarks',
+        'ei_language_specify',
+        'ei_language_remarks',
+        'ei_play_specify',
+        'ei_play_remarks',
+    ];
+
+    public const PLAN_TEXT_FIELDS = [
+        'plan',
+    ];
+
     /**
      * @var list<string>
      */
@@ -137,13 +253,20 @@ class Note extends Model
         ...self::EF_TEXT_FIELDS,
         ...self::BEHAVIOR_FIELDS,
         ...self::EF_BOOLEAN_FIELDS,
+        ...self::EI_TEXT_FIELDS,
+        ...self::EI_BOOLEAN_FIELDS,
+        ...self::EI_INTEGER_FIELDS,
+        ...self::PLAN_TEXT_FIELDS,
     ];
 
     protected function casts(): array
     {
-        return array_fill_keys(
-            array_merge(self::BEHAVIOR_FIELDS, self::EF_BOOLEAN_FIELDS),
-            'bool'
+        return array_merge(
+            array_fill_keys(
+                array_merge(self::BEHAVIOR_FIELDS, self::EF_BOOLEAN_FIELDS, self::EI_BOOLEAN_FIELDS),
+                'bool'
+            ),
+            array_fill_keys(self::EI_INTEGER_FIELDS, 'int')
         );
     }
 

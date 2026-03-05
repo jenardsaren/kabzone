@@ -17,6 +17,8 @@ class SessionNoteController extends Controller
             'behavior' => $this->behaviorFields($request),
             'activities' => $this->activitiesFields($request),
             'ef' => $this->efFields($request),
+            'ei' => $this->eiFields($request),
+            'plan' => $this->planFields($request),
             default => [],
         };
 
@@ -60,6 +62,36 @@ class SessionNoteController extends Controller
         return $values;
     }
 
+    private function eiFields(SessionNoteRequest $request): array
+    {
+        $values = [];
+
+        foreach (Note::EI_BOOLEAN_FIELDS as $field) {
+            $values[$field] = $this->checkboxValue($request, $field);
+        }
+
+        foreach (Note::EI_INTEGER_FIELDS as $field) {
+            $values[$field] = $this->numericValue($request->input($field));
+        }
+
+        foreach (Note::EI_TEXT_FIELDS as $field) {
+            $values[$field] = $this->trimmedText($request->input($field));
+        }
+
+        return $values;
+    }
+
+    private function planFields(SessionNoteRequest $request): array
+    {
+        $values = [];
+
+        foreach (Note::PLAN_TEXT_FIELDS as $field) {
+            $values[$field] = $this->trimmedText($request->input($field));
+        }
+
+        return $values;
+    }
+
     private function checkboxValue(SessionNoteRequest $request, string $field): ?bool
     {
         return $request->has($field) ? true : null;
@@ -68,5 +100,14 @@ class SessionNoteController extends Controller
     private function trimmedText(?string $value): ?string
     {
         return is_string($value) ? trim($value) ?: null : null;
+    }
+
+    private function numericValue(?string $value): ?int
+    {
+        if ($value === null || $value === '') {
+            return null;
+        }
+
+        return (int) $value;
     }
 }

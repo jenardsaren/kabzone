@@ -58,7 +58,7 @@
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
 
-                        <div>
+                        <div class="hidden">
                             <x-input-label for="notes" :value="__('Notes')" />
                             <textarea id="notes" name="notes" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>{{ old('notes', $session->notes) }}</textarea>
                             <x-input-error :messages="$errors->get('notes')" class="mt-2" />
@@ -136,9 +136,9 @@
                 <h3 class="text-lg font-semibold text-gray-900">Session Notes</h3>
 
                 <div class="mt-4 divide-y divide-gray-200 rounded-md border border-gray-200">
-                    <details class="group p-4">
+                    <details open class="group p-4">
                         <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span>Behavior Observations</span>
+                            <span class="uppercase">Behavior Observations</span>
                             <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
                             </svg>
@@ -151,9 +151,9 @@
                         </div>
                     </details>
 
-                    <details class="group p-4">
+                    <details open class="group p-4">
                         <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span>Activities and Management</span>
+                            <span class="uppercase">Activities and Management</span>
                             <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
                             </svg>
@@ -180,25 +180,45 @@
                         </div>
                     </details>
 
-                    <details class="group p-4">
+                    <details open class="group p-4">
                         <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span>EI Session Notes</span>
+                            <span class="uppercase">EI Session Notes</span>
                             <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
                             </svg>
                         </summary>
-                        <div class="mt-3 text-sm text-gray-700">No notes yet.</div>
+                        <div class="mt-2">
+                            @include('sessions.ei-session-notes-form', [
+                                'route' => route('therapist.sessions.notes.update', $session),
+                                'note' => $session->note,
+                            ])
+                        </div>
                     </details>
 
-                    <details class="group p-4">
+                    <details open class="group p-4">
                         <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span>EF Session Notes</span>
+                            <span class="uppercase">EF Session Notes</span>
                             <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
                             </svg>
                         </summary>
                         <div class="mt-2">
                             @include('sessions.ef-session-notes-form', [
+                                'route' => route('therapist.sessions.notes.update', $session),
+                                'note' => $session->note,
+                            ])
+                        </div>
+                    </details>
+
+                    <details open class="group p-4">
+                        <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
+                            <span class="uppercase">Plan</span>
+                            <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
+                            </svg>
+                        </summary>
+                        <div class="mt-2">
+                            @include('sessions.plan-form', [
                                 'route' => route('therapist.sessions.notes.update', $session),
                                 'note' => $session->note,
                             ])

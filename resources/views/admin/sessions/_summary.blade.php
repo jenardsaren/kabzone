@@ -77,7 +77,7 @@
     <div class="mt-6">
         <h4 class="font-semibold text-gray-900">Session Notes</h4>
         <div class="mt-3 divide-y divide-gray-200 rounded-md border border-gray-200">
-                    <details class="group p-4">
+                    <details open class="group p-4">
                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
                     <span>Behavior Observations</span>
                     <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -92,7 +92,7 @@
                 </div>
             </details>
 
-            <details class="group p-4">
+            <details open class="group p-4">
                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
                     <span>Activities and Management</span>
                     <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -121,17 +121,22 @@
                 </div>
             </details>
 
-            <details class="group p-4">
+            <details open class="group p-4">
                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
                     <span>EI Session Notes</span>
                     <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
                     </svg>
                 </summary>
-                <div class="mt-3 text-sm text-gray-700">No notes yet.</div>
+                <div class="mt-2">
+                    @include('sessions.ei-session-notes-form', [
+                        'route' => route('admin.sessions.notes.update', $session),
+                        'note' => $session->note,
+                    ])
+                </div>
             </details>
 
-            <details class="group p-4">
+            <details open class="group p-4">
                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
                     <span>EF Session Notes</span>
                     <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
@@ -140,6 +145,21 @@
                 </summary>
                 <div class="mt-2">
                     @include('sessions.ef-session-notes-form', [
+                        'route' => route('admin.sessions.notes.update', $session),
+                        'note' => $session->note,
+                    ])
+                </div>
+            </details>
+
+            <details open class="group p-4">
+                <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
+                    <span>Plan</span>
+                    <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
+                    </svg>
+                </summary>
+                <div class="mt-2">
+                    @include('sessions.plan-form', [
                         'route' => route('admin.sessions.notes.update', $session),
                         'note' => $session->note,
                     ])

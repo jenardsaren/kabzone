@@ -88,7 +88,7 @@
                                 <input type="radio" name="schedule_mode" value="single" x-model="mode" @checked(old('schedule_mode', 'single') === 'single')>
                                 Single
                             </label>
-                            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                            <label class="hidden inline-flex items-center gap-2 text-sm text-gray-700">
                                 <input type="radio" name="schedule_mode" value="repeat" x-model="mode" @checked(old('schedule_mode') === 'repeat')>
                                 Repeat Daily
                             </label>
