@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\SessionNoteRequest;
+use App\Models\Note;
 use App\Models\Session;
 use Illuminate\Http\RedirectResponse;
 
@@ -10,32 +11,62 @@ class SessionNoteController extends Controller
 {
     public function update(SessionNoteRequest $request, Session $session): RedirectResponse
     {
-        $noteValues = [];
         $section = $request->string('note_section')->toString();
-        $otherDetails = $request->input('bo_other_details');
-        $noteValues['bo_other_details'] = is_string($otherDetails) ? trim($otherDetails) ?: null : null;
+        $note = $session->note()->firstOrCreate([]);
+        $values = match ($section) {
+            'behavior' => $this->behaviorFields($request),
+            'activities' => $this->activitiesFields($request),
+            'ef' => $this->efFields($request),
+            default => [],
+        };
 
-        if ($section === 'behavior') {
-            $noteValues = array_merge($noteValues, [
-                'bo_cooperative' => $request->has('bo_cooperative') ? true : null,
-                'bo_calm_regulated' => $request->has('bo_calm_regulated') ? true : null,
-                'bo_restless_fidgety' => $request->has('bo_restless_fidgety') ? true : null,
-                'bo_easily_frustrated' => $request->has('bo_easily_frustrated') ? true : null,
-                'bo_tantrums' => $request->has('bo_tantrums') ? true : null,
-                'bo_meltdowns' => $request->has('bo_meltdowns') ? true : null,
-                'bo_avoidant' => $request->has('bo_avoidant') ? true : null,
-                'bo_aggressive' => $request->has('bo_aggressive') ? true : null,
-                'bo_other' => $request->has('bo_other') ? true : null,
-            ]);
-        }
-
-        if ($section === 'activities') {
-            $activities = $request->input('am_activities_and_management');
-            $noteValues['am_activities_and_management'] = is_string($activities) ? trim($activities) ?: null : null;
-        }
-
-        $session->note()->updateOrCreate([], $noteValues);
+        $note->fill($values)->save();
 
         return redirect()->back()->with('status', 'session-notes-updated');
+    }
+
+    private function behaviorFields(SessionNoteRequest $request): array
+    {
+        $values = [];
+
+        foreach (Note::BEHAVIOR_FIELDS as $field) {
+            $values[$field] = $this->checkboxValue($request, $field);
+        }
+
+        $values['bo_other_details'] = $this->trimmedText($request->input('bo_other_details'));
+
+        return $values;
+    }
+
+    private function activitiesFields(SessionNoteRequest $request): array
+    {
+        return [
+            'am_activities_and_management' => $this->trimmedText($request->input('am_activities_and_management')),
+        ];
+    }
+
+    private function efFields(SessionNoteRequest $request): array
+    {
+        $values = [];
+
+        foreach (Note::EF_BOOLEAN_FIELDS as $field) {
+            $values[$field] = $this->checkboxValue($request, $field);
+        }
+
+        foreach (Note::EF_TEXT_FIELDS as $field) {
+            $values[$field] = $this->trimmedText($request->input($field));
+        }
+
+        return $values;
+    }
+
+    private function checkboxValue(SessionNoteRequest $request, string $field): ?bool
+    {
+        return $request->has($field) ? true : null;
+    }
+
+    private function trimmedText(?string $value): ?string
+    {
+        return is_string($value) ? trim($value) ?: null : null;
     }
 }

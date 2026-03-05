@@ -9,7 +9,7 @@
                 Operating hours: Mon-Fri 8:00 AM-8:00 PM, Sun 1:00 PM-8:00 PM, Sat closed. Sessions are hourly slots.
             </div>
 
-            <div class="rounded-lg bg-white p-6 shadow-sm" x-data="{ mode: '{{ old('schedule_mode', 'single') }}' }">
+            <div class="rounded-lg bg-white p-6 shadow-sm" x-data="{ mode: @js(old('schedule_mode', 'single')) }">
                 <form method="POST" action="{{ route('front-desk.sessions.store') }}" class="space-y-4">
                     @csrf
 
