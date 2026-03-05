@@ -36,9 +36,9 @@
                         </div>
 
                         <div>
-                            <x-input-label for="therapist_id" :value="__('Therapist')" />
+                            <x-input-label for="therapist_id" :value="__('OTPR')" />
                             <select id="therapist_id" name="therapist_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                                <option value="">Select therapist</option>
+                                <option value="">Select OTPR</option>
                                 @foreach ($therapists as $therapist)
                                     <option value="{{ $therapist->id }}" @selected((int) old('therapist_id') === $therapist->id)>
                                         {{ $therapist->full_name }}
@@ -49,7 +49,7 @@
                         </div>
 
                         <div>
-                            <x-input-label for="assistant_id" :value="__('Assistant')" />
+                            <x-input-label for="assistant_id" :value="__('KSA')" />
                             <select id="assistant_id" name="assistant_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                                 <option value="">Unassigned</option>
                                 @foreach ($assistants as $assistant)

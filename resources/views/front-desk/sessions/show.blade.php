@@ -42,11 +42,11 @@
                         <p class="font-medium text-gray-900">{{ $session->client?->full_name }}</p>
                     </div>
                     <div>
-                        <p class="text-gray-500">Therapist</p>
+                        <p class="text-gray-500">OTPR</p>
                         <p class="font-medium text-gray-900">{{ $session->therapist?->full_name }}</p>
                     </div>
                     <div>
-                        <p class="text-gray-500">Assistant</p>
+                        <p class="text-gray-500">KSA</p>
                         <p class="font-medium text-gray-900">{{ $session->assistant?->full_name ?? 'Unassigned' }}</p>
                     </div>
                     <div>
@@ -61,7 +61,7 @@
                         <p class="mt-1 text-sm text-gray-700">{{ $session->description ?: 'No description provided.' }}</p>
                     </div>
 
-                    <div>
+                    <div class="hidden">
                         <p class="text-sm font-semibold text-gray-700">Notes</p>
                         <p class="mt-1 whitespace-pre-line text-sm text-gray-700">{{ $session->notes ?: 'No notes yet.' }}</p>
                     </div>

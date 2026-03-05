@@ -14,7 +14,7 @@
                     <th class="px-3 py-2">Date</th>
                     <th class="px-3 py-2">Time</th>
                     <th class="px-3 py-2">Client</th>
-                    <th class="px-3 py-2">Assistant</th>
+                    <th class="px-3 py-2">KSA</th>
                     <th class="px-3 py-2">Status</th>
                     <th class="px-3 py-2">Action</th>
                 </tr>

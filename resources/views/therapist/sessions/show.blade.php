@@ -5,7 +5,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="text-xl font-semibold text-gray-900">Therapist Session View</h2>
+            <h2 class="text-xl font-semibold text-gray-900">OTPR Session View</h2>
             <a href="{{ route('therapist.dashboard') }}" class="text-sm text-indigo-600 hover:text-indigo-500">Back</a>
         </div>
     </x-slot>
@@ -44,7 +44,7 @@
                     <h3 class="text-lg font-semibold text-gray-900">Session Details</h3>
 
                     <div class="mt-4">
-                        <p class="text-sm font-semibold text-gray-700">Assistant</p>
+                        <p class="text-sm font-semibold text-gray-700">KSA</p>
                         <p class="mt-1 text-sm text-gray-700">{{ $session->assistant?->full_name ?? 'Unassigned' }}</p>
                     </div>
 

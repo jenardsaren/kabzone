@@ -14,7 +14,7 @@
                             <tr>
                                 <th class="px-3 py-2">Date</th>
                                 <th class="px-3 py-2">Time</th>
-                                <th class="px-3 py-2">Therapist</th>
+                                <th class="px-3 py-2">OTPR</th>
                                 <th class="px-3 py-2">Type</th>
                                 <th class="px-3 py-2">Action</th>
                             </tr>

@@ -12,6 +12,10 @@ Core business outcomes:
 - Clients can view only completed sessions with details/notes.
 - Admin can manage staff accounts and monitor attended-session metrics and recent session activity.
 
+### Display Naming (cosmetic)
+- Therapist roles continue to use the `therapist` enum/backend identifiers, but the UI now shows “OTPR” wherever that role label appears to users (forms, lists, dashboards, etc.).
+- Assistant roles remain `assistant` in the backend while the UI labels them as “KSA”; dropdown values, policies, and routes stay unchanged.
+
 ## 2. Locked Decisions (from discovery)
 - Account creation: internal provisioning.
 - User management scope: Admin manages staff accounts; Front Desk manages client accounts.

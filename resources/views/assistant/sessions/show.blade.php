@@ -1,7 +1,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="text-xl font-semibold text-gray-900">Assistant Session View</h2>
+            <h2 class="text-xl font-semibold text-gray-900">KSA Session View</h2>
             <a href="{{ route('assistant.dashboard') }}" class="text-sm text-indigo-600 hover:text-indigo-500">Back</a>
         </div>
     </x-slot>
@@ -29,7 +29,7 @@
                         <p class="font-medium text-gray-900">{{ $session->client?->full_name }}</p>
                     </div>
                     <div>
-                        <p class="text-gray-500">Therapist</p>
+                        <p class="text-gray-500">OTPR</p>
                         <p class="font-medium text-gray-900">{{ $session->therapist?->full_name }}</p>
                     </div>
                 </div>

@@ -36,9 +36,9 @@
                         </div>
 
                         <div>
-                            <x-input-label for="therapist_id" :value="__('Therapist')" />
+                            <x-input-label for="therapist_id" :value="__('OTPR')" />
                             <select id="therapist_id" name="therapist_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                                <option value="">Select therapist</option>
+                                <option value="">Select OTPR</option>
                                 @foreach ($therapists as $therapist)
                                     <option value="{{ $therapist->id }}" @selected((int) old('therapist_id') === $therapist->id)>
                                         {{ $therapist->full_name }}
@@ -75,7 +75,7 @@
                                 <input type="radio" name="schedule_mode" value="single" x-model="mode" @checked(old('schedule_mode', 'single') === 'single')>
                                 Single
                             </label>
-                            <label class="inline-flex items-center gap-2 text-sm text-gray-700">
+                            <label class="hidden inline-flex items-center gap-2 text-sm text-gray-700">
                                 <input type="radio" name="schedule_mode" value="repeat" x-model="mode" @checked(old('schedule_mode') === 'repeat')>
                                 Repeat Daily
                             </label>

@@ -6,7 +6,7 @@
                 <a href="{{ route('admin.staff.create') }}" class="inline-flex items-center rounded-md bg-gray-800 px-4 py-2 text-sm font-semibold text-white hover:bg-gray-700">
                     Add Staff
                 </a>
-                <a href="{{ route('admin.sessions.create') }}" class="inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
+                <a href="{{ route('admin.sessions.create') }}" class="hidden inline-flex items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white hover:bg-indigo-500">
                     Create Session
                 </a>
             </div>
@@ -56,7 +56,7 @@
                             type="text"
                             name="search"
                             value="{{ $search }}"
-                            placeholder="Search client or therapist"
+                            placeholder="Search client or OTPR"
                             class="w-64 rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                         />
                         <button type="submit" class="rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-700">Search</button>
@@ -70,8 +70,8 @@
                                 <th class="px-3 py-2">Date</th>
                                 <th class="px-3 py-2">Time</th>
                                 <th class="px-3 py-2">Client</th>
-                                <th class="px-3 py-2">Therapist</th>
-                                <th class="px-3 py-2">Assistant</th>
+                                <th class="px-3 py-2">OTPR</th>
+                                <th class="px-3 py-2">KSA</th>
                                 <th class="px-3 py-2">Status</th>
                                 <th class="px-3 py-2">Notes</th>
                                 <th class="px-3 py-2">Action</th>

@@ -154,7 +154,7 @@
                         <p class="font-medium text-gray-900">{{ str($session->type->value)->headline() }}</p>
                     </div>
                     <div>
-                        <p class="text-gray-500">Therapist</p>
+                        <p class="text-gray-500">OTPR</p>
                         <p class="font-medium text-gray-900">{{ $session->therapist?->full_name }}</p>
                     </div>
                     <div>
@@ -167,7 +167,7 @@
             <div class="grid gap-6 lg:grid-cols-2">
                 <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                     <h3 class="text-lg font-semibold text-gray-900">Behavior Observations</h3>
-                    <p class="mt-1 text-sm text-gray-600">What the therapist observed during the session.</p>
+                    <p class="mt-1 text-sm text-gray-600">What the OTPR observed during the session.</p>
                     <div class="mt-4 flex flex-wrap gap-2">
                         @forelse ($behaviorObservations as $observation)
                             <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">{{ $observation }}</span>
@@ -182,7 +182,7 @@
 
                 <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                     <h3 class="text-lg font-semibold text-gray-900">Activities & Management</h3>
-                    <p class="mt-1 text-sm text-gray-600">How the therapist guided the session.</p>
+                    <p class="mt-1 text-sm text-gray-600">How the OTPR guided the session.</p>
                     <p class="mt-4 text-sm text-gray-700">{{ $note?->am_activities_and_management ?: 'No notes were added yet.' }}</p>
                 </div>
             </div>
@@ -196,32 +196,32 @@
                                 EI Session Notes were submitted for this session. Only the EI section below is displayed.
                             </div>
 
-                            <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                <h4 class="text-base font-semibold text-gray-800">Sensory processing</h4>
-                                <div class="mt-3 flex flex-wrap gap-2">
-                                    @foreach ($sensoryArousalLabels as $label => $field)
-                                        @if ($note?->{$field})
-                                            <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">Arousal {{ $label }}</span>
-                                        @endif
-                                    @endforeach
-
-                                    @foreach ($sensoryPatternLabels as $label => $field)
-                                        @if ($note?->{$field})
-                                            <span class="inline-flex items-center rounded-full bg-teal-100 px-3 py-0.5 text-xs font-semibold text-teal-700">Pattern {{ $label }}</span>
-                                        @endif
-                                    @endforeach
-                                </div>
-                                <div class="mt-3 flex flex-wrap gap-2">
-                                    @foreach ($regulationSupportLabels as $label => $field)
-                                        @if ($note?->{$field})
-                                            <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-semibold text-yellow-700">{{ $label }}</span>
-                                        @endif
-                                    @endforeach
-                                </div>
-                                <p class="mt-3 text-sm text-gray-600">{{ $note->ei_sensory_remarks ?: 'No remarks were added.' }}</p>
-                            </div>
-
                             <div class="grid gap-4 md:grid-cols-2">
+                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                    <h4 class="text-base font-semibold text-gray-800">Sensory processing</h4>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        @foreach ($sensoryArousalLabels as $label => $field)
+                                            @if ($note?->{$field})
+                                                <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">Arousal {{ $label }}</span>
+                                            @endif
+                                        @endforeach
+
+                                        @foreach ($sensoryPatternLabels as $label => $field)
+                                            @if ($note?->{$field})
+                                                <span class="inline-flex items-center rounded-full bg-teal-100 px-3 py-0.5 text-xs font-semibold text-teal-700">Pattern {{ $label }}</span>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                    <div class="mt-3 flex flex-wrap gap-2">
+                                        @foreach ($regulationSupportLabels as $label => $field)
+                                            @if ($note?->{$field})
+                                                <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-semibold text-yellow-700">{{ $label }}</span>
+                                            @endif
+                                        @endforeach
+                                    </div>
+                                    <p class="mt-3 text-sm text-gray-600">{{ $note->ei_sensory_remarks ?: 'No remarks were added.' }}</p>
+                                </div>
+
                                 <div class="rounded-lg border border-gray-200 bg-white p-4">
                                     <h4 class="text-base font-semibold text-gray-800">Gross Motor Skills</h4>
                                     <p class="mt-2 text-sm text-gray-700">{{ $note->ei_gross_motor_specify ?: 'Not specified.' }}</p>
@@ -230,6 +230,9 @@
                                     <p class="text-xs text-gray-500">Types: {{ $grossMotorTypes ? implode(', ', $grossMotorTypes) : 'Not recorded.' }}</p>
                                     <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_gross_motor_remarks ?: 'No remarks.' }}</p>
                                 </div>
+                            </div>
+
+                            <div class="grid gap-4 md:grid-cols-2">
                                 <div class="rounded-lg border border-gray-200 bg-white p-4">
                                     <h4 class="text-base font-semibold text-gray-800">Fine Motor Skills</h4>
                                     <p class="mt-2 text-sm text-gray-700">{{ $note->ei_fine_motor_specify ?: 'Not specified.' }}</p>
@@ -238,19 +241,18 @@
                                     <p class="text-xs text-gray-500">Types: {{ $fineMotorTypes ? implode(', ', $fineMotorTypes) : 'Not recorded.' }}</p>
                                     <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_fine_motor_remarks ?: 'No remarks.' }}</p>
                                 </div>
-                            </div>
-
-                            <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                <h4 class="text-base font-semibold text-gray-800">Work Behaviors</h4>
-                                <div class="mt-2 text-sm text-gray-700 space-y-1">
-                                    <p>Frustration tolerance: {{ $note->ei_work_behavior_frustration_tolerance !== null ? $note->ei_work_behavior_frustration_tolerance . '%' : 'Not recorded.' }}</p>
-                                    <p>Impulse control: {{ $note->ei_work_behavior_impulse_control !== null ? $note->ei_work_behavior_impulse_control . '%' : 'Not recorded.' }}</p>
-                                    <p>Compliance: {{ $note->ei_work_behavior_compliance !== null ? $note->ei_work_behavior_compliance . '%' : 'Not recorded.' }}</p>
+                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                        <h4 class="text-base font-semibold text-gray-800">Work Behaviors</h4>
+                                        <div class="mt-2 text-sm text-gray-700 space-y-1">
+                                            <p>Frustration tolerance: {{ $note->ei_work_behavior_frustration_tolerance !== null ? $note->ei_work_behavior_frustration_tolerance . '%' : 'Not recorded.' }}</p>
+                                            <p>Impulse control: {{ $note->ei_work_behavior_impulse_control !== null ? $note->ei_work_behavior_impulse_control . '%' : 'Not recorded.' }}</p>
+                                            <p>Compliance: {{ $note->ei_work_behavior_compliance !== null ? $note->ei_work_behavior_compliance . '%' : 'Not recorded.' }}</p>
+                                        </div>
+                                        <p class="mt-2 text-xs text-gray-500">Assistance: {{ $workBehaviorAssistance ? implode(', ', $workBehaviorAssistance) : 'Not recorded.' }}</p>
+                                        <p class="text-xs text-gray-500">Prompt/cues level: {{ $workBehaviorLevels ? implode(', ', $workBehaviorLevels) : 'Not recorded.' }}</p>
+                                        <p class="text-xs text-gray-500">Types: {{ $workBehaviorTypes ? implode(', ', $workBehaviorTypes) : 'Not recorded.' }}</p>
+                                        <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_work_behavior_remarks ?: 'No remarks.' }}</p>
                                 </div>
-                                <p class="mt-2 text-xs text-gray-500">Assistance: {{ $workBehaviorAssistance ? implode(', ', $workBehaviorAssistance) : 'Not recorded.' }}</p>
-                                <p class="text-xs text-gray-500">Prompt/cues level: {{ $workBehaviorLevels ? implode(', ', $workBehaviorLevels) : 'Not recorded.' }}</p>
-                                <p class="text-xs text-gray-500">Types: {{ $workBehaviorTypes ? implode(', ', $workBehaviorTypes) : 'Not recorded.' }}</p>
-                                <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_work_behavior_remarks ?: 'No remarks.' }}</p>
                             </div>
 
                             <div class="grid gap-4 md:grid-cols-2">
@@ -382,7 +384,7 @@
                             </div>
                         </div>
                     @else
-                        <p class="text-sm text-gray-500">The therapist did not submit EI or EF session notes for this appointment.</p>
+                        <p class="text-sm text-gray-500">The OTPR did not submit EI or EF session notes for this appointment.</p>
                     @endif
                 </div>
             </div>

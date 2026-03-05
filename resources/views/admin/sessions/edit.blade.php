@@ -21,7 +21,7 @@
                     @method('PATCH')
 
                     <div>
-                        <x-input-label for="assistant_id" :value="__('Assistant')" />
+                        <x-input-label for="assistant_id" :value="__('KSA')" />
                         <select id="assistant_id" name="assistant_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
                             <option value="">Unassigned</option>
                             @foreach ($assistants as $assistant)
@@ -49,7 +49,7 @@
                         <x-input-error :messages="$errors->get('description')" class="mt-2" />
                     </div>
 
-                    <div>
+                    <div class="hidden">
                         <x-input-label for="notes" :value="__('Notes')" />
                         <textarea id="notes" name="notes" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('notes', $session->notes) }}</textarea>
                         <x-input-error :messages="$errors->get('notes')" class="mt-2" />
