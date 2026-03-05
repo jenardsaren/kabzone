@@ -4,11 +4,12 @@ namespace App\Models;
 
 use App\Enums\SessionStatus;
 use App\Enums\SessionType;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Support\Carbon;
 
 class Session extends Model
@@ -60,6 +61,11 @@ class Session extends Model
     public function tasks(): HasMany
     {
         return $this->hasMany(Task::class);
+    }
+
+    public function note(): HasOne
+    {
+        return $this->hasOne(Note::class);
     }
 
     public function scopeRecent(Builder $query): Builder
