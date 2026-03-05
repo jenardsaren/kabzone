@@ -43,22 +43,14 @@
                 <div class="rounded-lg bg-white p-6 shadow-sm">
                     <h3 class="text-lg font-semibold text-gray-900">Session Details</h3>
 
+                    <div class="mt-4">
+                        <p class="text-sm font-semibold text-gray-700">Assistant</p>
+                        <p class="mt-1 text-sm text-gray-700">{{ $session->assistant?->full_name ?? 'Unassigned' }}</p>
+                    </div>
+
                     <form method="POST" action="{{ route('therapist.sessions.details.update', $session) }}" class="mt-4 space-y-4">
                         @csrf
                         @method('PATCH')
-
-                        <div>
-                            <x-input-label for="assistant_id" :value="__('Assistant')" />
-                            <select id="assistant_id" name="assistant_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>
-                                <option value="">Unassigned</option>
-                                @foreach ($assistants as $assistant)
-                                    <option value="{{ $assistant->id }}" @selected((int) old('assistant_id', $session->assistant_id) === $assistant->id)>
-                                        {{ $assistant->full_name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                            <x-input-error :messages="$errors->get('assistant_id')" class="mt-2" />
-                        </div>
 
                         <div>
                             <x-input-label for="description" :value="__('Description')" />

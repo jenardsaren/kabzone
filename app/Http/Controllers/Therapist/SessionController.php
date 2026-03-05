@@ -2,17 +2,13 @@
 
 namespace App\Http\Controllers\Therapist;
 
-use App\Enums\SessionStatus;
 use App\Enums\TaskStatus;
-use App\Enums\UserRole;
-use App\Enums\UserStatus;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Therapist\StoreTaskRequest;
 use App\Http\Requests\Therapist\UpdateSessionDetailsRequest;
 use App\Http\Requests\Therapist\UpdateSessionStatusRequest;
 use App\Models\Session;
 use App\Models\Task;
-use App\Models\User;
 use App\Services\SessionLockService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
@@ -25,16 +21,8 @@ class SessionController extends Controller
 
         $session->load(['client', 'therapist', 'assistant', 'tasks']);
 
-        $assistants = User::query()
-            ->where('role', UserRole::Assistant->value)
-            ->where('status', UserStatus::Active->value)
-            ->orderBy('last_name')
-            ->orderBy('first_name')
-            ->get();
-
         return view('therapist.sessions.show', [
             'session' => $session,
-            'assistants' => $assistants,
         ]);
     }
 

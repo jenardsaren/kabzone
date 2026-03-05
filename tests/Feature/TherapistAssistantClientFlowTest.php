@@ -131,7 +131,6 @@ it('locks completed sessions for therapist edits while allowing admin override',
 
     $this->actingAs($therapist)
         ->patch(route('therapist.sessions.details.update', $session), [
-            'assistant_id' => $assistant->id,
             'description' => 'Updated',
             'notes' => 'Changed notes',
         ])->assertForbidden();

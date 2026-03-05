@@ -19,6 +19,15 @@ class StoreSessionRequest extends FormRequest
         return $this->user()?->can('create', Session::class) ?? false;
     }
 
+    protected function prepareForValidation(): void
+    {
+        if ($this->input('assistant_id') === '') {
+            $this->merge([
+                'assistant_id' => null,
+            ]);
+        }
+    }
+
     /**
      * @return array<string, array<int, mixed>>
      */
@@ -30,6 +39,7 @@ class StoreSessionRequest extends FormRequest
             'type' => ['required', Rule::in(SessionType::values())],
             'client_id' => ['required', 'integer', Rule::exists('users', 'id')],
             'therapist_id' => ['required', 'integer', Rule::exists('users', 'id')],
+            'assistant_id' => ['nullable', 'integer', Rule::exists('users', 'id')],
             'description' => ['nullable', 'string'],
             'schedule_mode' => ['required', Rule::in(['single', 'repeat'])],
             'repeat_days' => ['nullable', 'integer', 'min:1', 'max:30', Rule::requiredIf($this->input('schedule_mode') === 'repeat')],
@@ -46,6 +56,7 @@ class StoreSessionRequest extends FormRequest
             $scheduler = app(SessionSchedulerService::class);
             $client = User::query()->find((int) $this->integer('client_id'));
             $therapist = User::query()->find((int) $this->integer('therapist_id'));
+            $assistant = User::query()->find((int) $this->integer('assistant_id'));
 
             if (! $client instanceof User || ! $client->isRole(UserRole::Client) || $client->status !== UserStatus::Active) {
                 $validator->errors()->add('client_id', 'The selected client must be an active client account.');
@@ -53,6 +64,10 @@ class StoreSessionRequest extends FormRequest
 
             if (! $therapist instanceof User || ! $therapist->isRole(UserRole::Therapist) || $therapist->status !== UserStatus::Active) {
                 $validator->errors()->add('therapist_id', 'The selected therapist must be an active therapist account.');
+            }
+
+            if (! $assistant instanceof User || ! $assistant->isRole(UserRole::Assistant) || $assistant->status !== UserStatus::Active) {
+                $validator->errors()->add('assistant_id', 'The selected assistant must be an active assistant account.');
             }
 
             $date = CarbonImmutable::parse($this->string('date')->toString(), SessionSchedulerService::TIMEZONE);

@@ -21,6 +21,7 @@ class SessionSchedulerService
      *     type: string,
      *     client_id: int,
      *     therapist_id: int,
+     *     assistant_id?: ?int,
      *     description?: ?string,
      *     schedule_mode: string,
      *     repeat_days?: ?int
@@ -30,7 +31,7 @@ class SessionSchedulerService
     public function schedule(array $data): array
     {
         $dates = $this->resolveDates($data);
-        $created = new Collection();
+        $created = new Collection;
         $skipped = [];
 
         DB::transaction(function () use ($data, $dates, $created, &$skipped): void {
@@ -59,6 +60,7 @@ class SessionSchedulerService
                     'type' => $data['type'],
                     'client_id' => $data['client_id'],
                     'therapist_id' => $data['therapist_id'],
+                    'assistant_id' => $data['assistant_id'] ?? null,
                     'description' => $data['description'] ?? null,
                     'status' => SessionStatus::Pending,
                 ]));
@@ -120,7 +122,7 @@ class SessionSchedulerService
     }
 
     /**
-     * @param array{date: string, schedule_mode: string, repeat_days?: ?int} $data
+     * @param  array{date: string, schedule_mode: string, repeat_days?: ?int}  $data
      * @return list<CarbonImmutable>
      */
     private function resolveDates(array $data): array

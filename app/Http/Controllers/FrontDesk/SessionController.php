@@ -34,9 +34,17 @@ class SessionController extends Controller
             ->orderBy('first_name')
             ->get();
 
+        $assistants = User::query()
+            ->where('role', UserRole::Assistant->value)
+            ->where('status', UserStatus::Active->value)
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->get();
+
         return view('front-desk.sessions.create', [
             'clients' => $clients,
             'therapists' => $therapists,
+            'assistants' => $assistants,
         ]);
     }
 
@@ -80,10 +88,18 @@ class SessionController extends Controller
             ->orderBy('first_name')
             ->get();
 
+        $assistants = User::query()
+            ->where('role', UserRole::Assistant->value)
+            ->where('status', UserStatus::Active->value)
+            ->orderBy('last_name')
+            ->orderBy('first_name')
+            ->get();
+
         return view('front-desk.sessions.edit', [
             'session' => $session,
             'clients' => $clients,
             'therapists' => $therapists,
+            'assistants' => $assistants,
         ]);
     }
 

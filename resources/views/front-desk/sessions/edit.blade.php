@@ -55,6 +55,19 @@
                             <x-input-error :messages="$errors->get('therapist_id')" class="mt-2" />
                         </div>
 
+                        <div>
+                            <x-input-label for="assistant_id" :value="__('Assistant')" />
+                            <select id="assistant_id" name="assistant_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>
+                                <option value="">Unassigned</option>
+                                @foreach ($assistants as $assistant)
+                                    <option value="{{ $assistant->id }}" @selected((int) old('assistant_id', $session->assistant_id) === $assistant->id)>
+                                        {{ $assistant->full_name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <x-input-error :messages="$errors->get('assistant_id')" class="mt-2" />
+                        </div>
+
                         <div class="sm:col-span-2">
                             <x-input-label for="client_id" :value="__('Client')" />
                             <select id="client_id" name="client_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required @disabled(! $isPending)>
