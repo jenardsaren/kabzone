@@ -26,6 +26,7 @@ class Note extends Model
         'bo_aggressive',
         'bo_other',
         'bo_other_details',
+        'am_activities_and_management',
     ];
 
     protected $casts = [

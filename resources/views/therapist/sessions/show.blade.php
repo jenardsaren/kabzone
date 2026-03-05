@@ -158,7 +158,26 @@
                                 <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
                             </svg>
                         </summary>
-                        <div class="mt-3 text-sm text-gray-700">No notes yet.</div>
+                        <div class="mt-3">
+                            <form method="POST" action="{{ route('therapist.sessions.notes.update', $session) }}" class="space-y-3">
+                                @csrf
+                                @method('PATCH')
+                                <input type="hidden" name="note_section" value="activities">
+
+                                <x-input-label for="am_activities_and_management" :value="__('Activities and Management')" />
+                                <textarea
+                                    id="am_activities_and_management"
+                                    name="am_activities_and_management"
+                                    rows="4"
+                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                >{{ old('am_activities_and_management', $session->note?->am_activities_and_management) }}</textarea>
+                                <x-input-error :messages="$errors->get('am_activities_and_management')" class="mt-2" />
+
+                                <div class="flex justify-end">
+                                    <x-primary-button>Save</x-primary-button>
+                                </div>
+                            </form>
+                        </div>
                     </details>
 
                     <details class="group p-4">

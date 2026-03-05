@@ -25,6 +25,7 @@ return new class extends Migration
             $table->boolean('bo_aggressive')->nullable();
             $table->boolean('bo_other')->nullable();
             $table->text('bo_other_details')->nullable();
+            $table->text('am_activities_and_management')->nullable();
             $table->timestamps();
 
             $table->unique('session_id');

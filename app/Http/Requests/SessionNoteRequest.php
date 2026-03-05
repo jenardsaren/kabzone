@@ -34,6 +34,7 @@ class SessionNoteRequest extends FormRequest
             'bo_aggressive' => ['sometimes', 'boolean'],
             'bo_other' => ['sometimes', 'boolean'],
             'bo_other_details' => ['nullable', 'string', 'max:500'],
+            'am_activities_and_management' => ['nullable', 'string', 'max:500'],
         ];
     }
 }
