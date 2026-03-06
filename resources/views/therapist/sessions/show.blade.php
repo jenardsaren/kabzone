@@ -5,7 +5,7 @@
 <x-app-layout>
     <x-slot name="header">
         <div class="flex items-center justify-between">
-            <h2 class="text-xl font-semibold text-gray-900">OTPR Session View</h2>
+            <h2 class="text-xl font-semibold text-gray-900">OT Session View</h2>
             <a href="{{ route('therapist.dashboard') }}" class="text-sm text-indigo-600 hover:text-indigo-500">Back</a>
         </div>
     </x-slot>

@@ -154,7 +154,7 @@
                         <p class="font-medium text-gray-900">{{ str($session->type->value)->headline() }}</p>
                     </div>
                     <div>
-                        <p class="text-gray-500">OTPR</p>
+                        <p class="text-gray-500">OT</p>
                         <p class="font-medium text-gray-900">{{ $session->therapist?->full_name }}</p>
                     </div>
                     <div>
@@ -167,7 +167,7 @@
             <div class="grid gap-6 lg:grid-cols-2">
                 <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                     <h3 class="text-lg font-semibold text-gray-900">Behavior Observations</h3>
-                    <p class="mt-1 text-sm text-gray-600">What the OTPR observed during the session.</p>
+                    <p class="mt-1 text-sm text-gray-600">What the OT observed during the session.</p>
                     <div class="mt-4 flex flex-wrap gap-2">
                         @forelse ($behaviorObservations as $observation)
                             <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">{{ $observation }}</span>
@@ -182,7 +182,7 @@
 
                 <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                     <h3 class="text-lg font-semibold text-gray-900">Activities & Management</h3>
-                    <p class="mt-1 text-sm text-gray-600">How the OTPR guided the session.</p>
+                    <p class="mt-1 text-sm text-gray-600">How the OT guided the session.</p>
                     <p class="mt-4 text-sm text-gray-700">{{ $note?->am_activities_and_management ?: 'No notes were added yet.' }}</p>
                 </div>
             </div>
@@ -384,7 +384,7 @@
                             </div>
                         </div>
                     @else
-                        <p class="text-sm text-gray-500">The OTPR did not submit EI or EF session notes for this appointment.</p>
+                        <p class="text-sm text-gray-500">The OT did not submit EI or EF session notes for this appointment.</p>
                     @endif
                 </div>
             </div>

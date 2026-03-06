@@ -42,7 +42,7 @@
                         <p class="font-medium text-gray-900">{{ $session->client?->full_name }}</p>
                     </div>
                     <div>
-                        <p class="text-gray-500">OTPR</p>
+                        <p class="text-gray-500">OT</p>
                         <p class="font-medium text-gray-900">{{ $session->therapist?->full_name }}</p>
                     </div>
                     <div>
