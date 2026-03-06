@@ -158,7 +158,7 @@
                                 <p class="text-gray-500">OT</p>
                                 <p class="font-medium text-gray-900">{{ $session->therapist?->full_name }}</p>
                             </div>
-                            <div>
+                            <div class='hidden'>
                                 <p class="text-gray-500">KSA</p>
                                 <p class="font-medium text-gray-900">{{ $session->assistant?->full_name ?? 'Unassigned' }}</p>
                             </div>
