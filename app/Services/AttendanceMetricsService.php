@@ -41,7 +41,6 @@ class AttendanceMetricsService
     private function attendedQuery(): Builder
     {
         return Session::query()
-            ->where('status', SessionStatus::Completed->value)
-            ->whereHas('tasks');
+            ->where('status', SessionStatus::Completed->value);
     }
 }

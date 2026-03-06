@@ -51,10 +51,6 @@ class UpdateSessionStatusRequest extends FormRequest
                 if ($session->assistant_id === null) {
                     $validator->errors()->add('status', 'An assistant must be assigned before completing this session.');
                 }
-
-                if (! $session->tasks()->exists()) {
-                    $validator->errors()->add('status', 'At least one task is required before completing this session.');
-                }
             }
         });
     }

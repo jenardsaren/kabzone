@@ -6,7 +6,7 @@ use App\Enums\UserRole;
 use App\Models\Session;
 use App\Models\Task;
 
-it('prevents therapist completion without assistant and tasks', function (): void {
+it('prevents therapist completion without assistant', function (): void {
     $therapist = signInAs(UserRole::Therapist, ['must_change_password' => false]);
     $client = makeUser(UserRole::Client);
 
@@ -23,7 +23,26 @@ it('prevents therapist completion without assistant and tasks', function (): voi
     expect($session->refresh()->status->value)->toBe(SessionStatus::Pending->value);
 });
 
-it('allows therapist to complete once assistant and tasks exist', function (): void {
+it('allows therapist to complete when assistant assigned without tasks', function (): void {
+    $therapist = signInAs(UserRole::Therapist, ['must_change_password' => false]);
+    $assistant = makeUser(UserRole::Assistant);
+    $client = makeUser(UserRole::Client);
+
+    $session = Session::factory()->create([
+        'client_id' => $client->id,
+        'therapist_id' => $therapist->id,
+        'assistant_id' => $assistant->id,
+        'status' => SessionStatus::Pending,
+    ]);
+
+    $this->patch(route('therapist.sessions.status.update', $session), [
+        'status' => SessionStatus::Completed->value,
+    ])->assertRedirect(route('therapist.sessions.show', $session, absolute: false));
+
+    expect($session->refresh()->status->value)->toBe(SessionStatus::Completed->value);
+});
+
+it('allows therapist to complete when assistant and tasks exist', function (): void {
     $therapist = signInAs(UserRole::Therapist, ['must_change_password' => false]);
     $assistant = makeUser(UserRole::Assistant);
     $client = makeUser(UserRole::Client);

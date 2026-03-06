@@ -13,6 +13,7 @@
                 <tr>
                     <th class="px-3 py-2">Date</th>
                     <th class="px-3 py-2">Time</th>
+                    <th class="px-3 py-2">Type</th>
                     <th class="px-3 py-2">Client</th>
                     <th class="px-3 py-2">KSA</th>
                     <th class="px-3 py-2">Status</th>
@@ -24,6 +25,7 @@
                     <tr>
                         <td class="px-3 py-2">{{ $session->date->format('M d, Y') }}</td>
                         <td class="px-3 py-2">{{ $session->formatted_time }}</td>
+                        <td class="px-3 py-2">{{ str($session->type->value)->headline() }}</td>
                         <td class="px-3 py-2">{{ $session->client?->full_name }}</td>
                         <td class="px-3 py-2">{{ $session->assistant?->full_name ?? 'Unassigned' }}</td>
                         <td class="px-3 py-2"><x-status-badge :status="$session->status" /></td>
@@ -33,7 +35,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-3 py-6 text-center text-gray-500">{{ $emptyMessage }}</td>
+                        <td colspan="7" class="px-3 py-6 text-center text-gray-500">{{ $emptyMessage }}</td>
                     </tr>
                 @endforelse
             </tbody>

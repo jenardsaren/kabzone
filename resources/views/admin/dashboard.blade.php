@@ -49,7 +49,7 @@
 
             <div class="rounded-lg bg-white p-4 shadow-sm sm:p-6">
                 <div class="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-                    <h3 class="text-lg font-semibold text-gray-900">Recent Sessions</h3>
+                    <h3 class="text-lg font-semibold text-gray-900">Today's Sessions</h3>
 
                     <form method="GET" action="{{ route('admin.dashboard') }}" class="flex gap-2">
                         <input
@@ -69,6 +69,7 @@
                             <tr>
                                 <th class="px-3 py-2">Date</th>
                                 <th class="px-3 py-2">Time</th>
+                                <th class="px-3 py-2">Type</th>
                                 <th class="px-3 py-2">Client</th>
                                 <th class="px-3 py-2">OT</th>
                                 <th class="px-3 py-2">KSA</th>
@@ -78,10 +79,11 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-100">
-                            @forelse ($sessions as $session)
+                            @forelse ($todaySessions as $session)
                                 <tr>
                                     <td class="px-3 py-2">{{ $session->date->format('M d, Y') }}</td>
                                     <td class="px-3 py-2">{{ $session->formatted_time }}</td>
+                                    <td class="px-3 py-2">{{ str($session->type->value)->headline() }}</td>
                                     <td class="px-3 py-2">{{ $session->client?->full_name }}</td>
                                     <td class="px-3 py-2">{{ $session->therapist?->full_name }}</td>
                                     <td class="px-3 py-2">{{ $session->assistant?->full_name ?? 'Unassigned' }}</td>
@@ -93,7 +95,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="8" class="px-3 py-6 text-center text-gray-500">No sessions found.</td>
+                                    <td colspan="9" class="px-3 py-6 text-center text-gray-500">No sessions found.</td>
                                 </tr>
                             @endforelse
                         </tbody>
@@ -101,7 +103,56 @@
                 </div>
 
                 <div class="mt-4">
-                    {{ $sessions->links() }}
+                    {{ $todaySessions->links() }}
+                </div>
+            </div>
+
+            <div class="rounded-lg bg-white p-4 shadow-sm sm:p-6">
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Upcoming Sessions</h3>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                            <tr>
+                                <th class="px-3 py-2">Date</th>
+                                <th class="px-3 py-2">Time</th>
+                                <th class="px-3 py-2">Type</th>
+                                <th class="px-3 py-2">Client</th>
+                                <th class="px-3 py-2">OT</th>
+                                <th class="px-3 py-2">KSA</th>
+                                <th class="px-3 py-2">Status</th>
+                                <th class="px-3 py-2">Notes</th>
+                                <th class="px-3 py-2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @forelse ($upcomingSessions as $session)
+                                <tr>
+                                    <td class="px-3 py-2">{{ $session->date->format('M d, Y') }}</td>
+                                    <td class="px-3 py-2">{{ $session->formatted_time }}</td>
+                                    <td class="px-3 py-2">{{ str($session->type->value)->headline() }}</td>
+                                    <td class="px-3 py-2">{{ $session->client?->full_name }}</td>
+                                    <td class="px-3 py-2">{{ $session->therapist?->full_name }}</td>
+                                    <td class="px-3 py-2">{{ $session->assistant?->full_name ?? 'Unassigned' }}</td>
+                                    <td class="px-3 py-2"><x-status-badge :status="$session->status" /></td>
+                                    <td class="px-3 py-2">{{ $session->notes ? 'Available' : 'None' }}</td>
+                                    <td class="px-3 py-2">
+                                        <a href="{{ route('admin.sessions.edit', $session) }}" class="text-indigo-600 hover:text-indigo-500">Override</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="px-3 py-6 text-center text-gray-500">No upcoming sessions found.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    {{ $upcomingSessions->links() }}
                 </div>
             </div>
         </div>
