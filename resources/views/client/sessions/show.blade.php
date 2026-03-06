@@ -139,259 +139,259 @@
 
     <div class="py-8">
         <div class="mx-auto max-w-5xl space-y-6 px-4 sm:px-6 lg:px-8">
-            <div class="rounded-lg bg-white p-6 shadow-sm">
-                <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
-                    <div>
-                        <p class="text-gray-500">Date</p>
-                        <p class="font-medium text-gray-900">{{ $session->date->format('M d, Y') }}</p>
+            <div class="space-y-6">
+                    <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                        <div class="grid gap-4 sm:grid-cols-2 text-sm">
+                            <div>
+                                <p class="text-gray-500">Date</p>
+                                <p class="font-medium text-gray-900">{{ $session->date->format('M d, Y') }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500">Time</p>
+                                <p class="font-medium text-gray-900">{{ $session->formatted_time }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500">Type</p>
+                                <p class="font-medium text-gray-900">{{ str($session->type->value)->headline() }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500">OT</p>
+                                <p class="font-medium text-gray-900">{{ $session->therapist?->full_name }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500">KSA</p>
+                                <p class="font-medium text-gray-900">{{ $session->assistant?->full_name ?? 'Unassigned' }}</p>
+                            </div>
+                            <div>
+                                <p class="text-gray-500">Status</p>
+                                <p><x-status-badge :status="$session->status" /></p>
+                            </div>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-gray-500">Time</p>
-                        <p class="font-medium text-gray-900">{{ $session->formatted_time }}</p>
+
+                    <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-900">Description & Summary</h3>
+                        <p class="mt-3 text-sm text-gray-700">{{ $session->description ?: 'No description was provided.' }}</p>
+                        <div class="mt-6 rounded-lg bg-gray-50 p-4">
+                            <p class="text-xs font-semibold uppercase tracking-wide text-gray-500">Summary</p>
+                            <p class="mt-2 text-sm text-gray-700">{{ $session->summary ?: 'No summary was provided yet.' }}</p>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-gray-500">Type</p>
-                        <p class="font-medium text-gray-900">{{ str($session->type->value)->headline() }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500">OT</p>
-                        <p class="font-medium text-gray-900">{{ $session->therapist?->full_name }}</p>
-                    </div>
-                    <div>
-                        <p class="text-gray-500">Status</p>
-                        <p><x-status-badge :status="$session->status" /></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="grid gap-6 lg:grid-cols-2">
-                <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900">Behavior Observations</h3>
-                    <p class="mt-1 text-sm text-gray-600">What the OT observed during the session.</p>
-                    <div class="mt-4 flex flex-wrap gap-2">
-                        @forelse ($behaviorObservations as $observation)
-                            <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">{{ $observation }}</span>
-                        @empty
-                            <p class="text-sm text-gray-500">No observations were recorded yet.</p>
-                        @endforelse
-                    </div>
-                    @if (filled($note?->bo_other_details))
-                        <p class="mt-4 text-sm text-gray-700">{{ $note->bo_other_details }}</p>
-                    @endif
-                </div>
-
-                <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900">Activities & Management</h3>
-                    <p class="mt-1 text-sm text-gray-600">How the OT guided the session.</p>
-                    <p class="mt-4 text-sm text-gray-700">{{ $note?->am_activities_and_management ?: 'No notes were added yet.' }}</p>
-                </div>
-            </div>
-
-            @if ($hasEiNotes || $hasEfNotes)
-                <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900">Session Notes</h3>
-                    <div class="mt-4 space-y-6">
-                        @if ($hasEiNotes)
-                            <div class="space-y-4">
-                                <div class="rounded-md bg-indigo-50 p-4 text-sm text-indigo-700">
-                                    EI Session Notes were submitted for this session. Only the EI section below is displayed.
-                                </div>
-
-                                <div class="grid gap-4 md:grid-cols-2">
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Sensory processing</h4>
-                                        <div class="mt-3 flex flex-wrap gap-2">
-                                            @foreach ($sensoryArousalLabels as $label => $field)
-                                                @if ($note?->{$field})
-                                                    <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">Arousal {{ $label }}</span>
-                                                @endif
-                                            @endforeach
-
-                                            @foreach ($sensoryPatternLabels as $label => $field)
-                                                @if ($note?->{$field})
-                                                    <span class="inline-flex items-center rounded-full bg-teal-100 px-3 py-0.5 text-xs font-semibold text-teal-700">Pattern {{ $label }}</span>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                        <div class="mt-3 flex flex-wrap gap-2">
-                                            @foreach ($regulationSupportLabels as $label => $field)
-                                                @if ($note?->{$field})
-                                                    <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-semibold text-yellow-700">{{ $label }}</span>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                        <p class="mt-3 text-sm text-gray-600">{{ $note->ei_sensory_remarks ?: 'No remarks were added.' }}</p>
-                                    </div>
-
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Gross Motor Skills</h4>
-                                        <p class="mt-2 text-sm text-gray-700">{{ $note->ei_gross_motor_specify ?: 'Not specified.' }}</p>
-                                        <p class="mt-2 text-xs text-gray-500">Assistance: {{ $grossMotorAssistance ? implode(', ', $grossMotorAssistance) : 'Not recorded.' }}</p>
-                                        <p class="mt-1 text-xs text-gray-500">Prompt/cues level: {{ $grossMotorLevels ? implode(', ', $grossMotorLevels) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Types: {{ $grossMotorTypes ? implode(', ', $grossMotorTypes) : 'Not recorded.' }}</p>
-                                        <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_gross_motor_remarks ?: 'No remarks.' }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="grid gap-4 md:grid-cols-2">
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Fine Motor Skills</h4>
-                                        <p class="mt-2 text-sm text-gray-700">{{ $note->ei_fine_motor_specify ?: 'Not specified.' }}</p>
-                                        <p class="mt-2 text-xs text-gray-500">Assistance: {{ $fineMotorAssistance ? implode(', ', $fineMotorAssistance) : 'Not recorded.' }}</p>
-                                        <p class="mt-1 text-xs text-gray-500">Prompt/cues level: {{ $fineMotorLevels ? implode(', ', $fineMotorLevels) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Types: {{ $fineMotorTypes ? implode(', ', $fineMotorTypes) : 'Not recorded.' }}</p>
-                                        <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_fine_motor_remarks ?: 'No remarks.' }}</p>
-                                    </div>
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                            <h4 class="text-base font-semibold text-gray-800">Work Behaviors</h4>
-                                            <div class="mt-2 text-sm text-gray-700 space-y-1">
-                                                <p>Frustration tolerance: {{ $note->ei_work_behavior_frustration_tolerance !== null ? $note->ei_work_behavior_frustration_tolerance . '%' : 'Not recorded.' }}</p>
-                                                <p>Impulse control: {{ $note->ei_work_behavior_impulse_control !== null ? $note->ei_work_behavior_impulse_control . '%' : 'Not recorded.' }}</p>
-                                                <p>Compliance: {{ $note->ei_work_behavior_compliance !== null ? $note->ei_work_behavior_compliance . '%' : 'Not recorded.' }}</p>
+                @if ($session->type !== \App\Enums\SessionType::Initial)
+                        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                            <h3 class="text-lg font-semibold text-gray-900">Session Notes</h3>
+                            <div class="mt-4 space-y-6">
+                                @if ($hasEiNotes || $hasEfNotes)
+                                    @if ($hasEiNotes)
+                                        <div class="space-y-4">
+                                            <div class="rounded-md bg-indigo-50 p-4 text-sm text-indigo-700">
+                                                EI Session Notes were submitted for this session. Only the EI section below is displayed.
                                             </div>
-                                            <p class="mt-2 text-xs text-gray-500">Assistance: {{ $workBehaviorAssistance ? implode(', ', $workBehaviorAssistance) : 'Not recorded.' }}</p>
-                                            <p class="text-xs text-gray-500">Prompt/cues level: {{ $workBehaviorLevels ? implode(', ', $workBehaviorLevels) : 'Not recorded.' }}</p>
-                                            <p class="text-xs text-gray-500">Types: {{ $workBehaviorTypes ? implode(', ', $workBehaviorTypes) : 'Not recorded.' }}</p>
-                                            <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_work_behavior_remarks ?: 'No remarks.' }}</p>
-                                    </div>
-                                </div>
 
-                                <div class="grid gap-4 md:grid-cols-2">
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Cognitive & Processing</h4>
-                                        <div class="mt-2 flex flex-wrap gap-2">
-                                            @foreach ($cognitiveChecklist as $label => $field)
-                                                @if ($note?->{$field})
-                                                    <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">{{ $label }}</span>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                        <p class="mt-2 text-xs text-gray-500">Assistance: {{ $cognitiveAssistance ? implode(', ', $cognitiveAssistance) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Prompt/cues level: {{ $cognitiveLevels ? implode(', ', $cognitiveLevels) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Types: {{ $cognitiveTypes ? implode(', ', $cognitiveTypes) : 'Not recorded.' }}</p>
-                                        <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_cognitive_remarks ?: 'No remarks.' }}</p>
-                                    </div>
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Visual Perceptual / Motor</h4>
-                                        <div class="mt-2 flex flex-wrap gap-2">
-                                            @foreach ($visualChecklist as $label => $field)
-                                                @if ($note?->{$field})
-                                                    <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-semibold text-emerald-700">{{ $label }}</span>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                        <p class="mt-2 text-xs text-gray-500">Assistance: {{ $visualAssistance ? implode(', ', $visualAssistance) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Prompt/cues level: {{ $visualLevels ? implode(', ', $visualLevels) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Types: {{ $visualTypes ? implode(', ', $visualTypes) : 'Not recorded.' }}</p>
-                                        <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_visual_remarks ?: 'No remarks.' }}</p>
-                                    </div>
-                                </div>
+                                            <div class="grid gap-4 md:grid-cols-2">
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Sensory processing</h4>
+                                                    <div class="mt-3 flex flex-wrap gap-2">
+                                                        @foreach ($sensoryArousalLabels as $label => $field)
+                                                            @if ($note?->{$field})
+                                                                <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">Arousal {{ $label }}</span>
+                                                            @endif
+                                                        @endforeach
 
-                                <div class="grid gap-4 md:grid-cols-2">
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Language & Communication</h4>
-                                        <p class="mt-2 text-sm text-gray-700">{{ $note->ei_language_specify ?: 'Not specified.' }}</p>
-                                        <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_language_remarks ?: 'No remarks.' }}</p>
-                                    </div>
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Play Skills</h4>
-                                        <p class="mt-2 text-sm text-gray-700">{{ $note->ei_play_specify ?: 'Not specified.' }}</p>
-                                        <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_play_remarks ?: 'No remarks.' }}</p>
-                                    </div>
-                                </div>
+                                                        @foreach ($sensoryPatternLabels as $label => $field)
+                                                            @if ($note?->{$field})
+                                                                <span class="inline-flex items-center rounded-full bg-teal-100 px-3 py-0.5 text-xs font-semibold text-teal-700">Pattern {{ $label }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                    <div class="mt-3 flex flex-wrap gap-2">
+                                                        @foreach ($regulationSupportLabels as $label => $field)
+                                                            @if ($note?->{$field})
+                                                                <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-semibold text-yellow-700">{{ $label }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                    <p class="mt-3 text-sm text-gray-600">{{ $note->ei_sensory_remarks ?: 'No remarks were added.' }}</p>
+                                                </div>
+
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Gross Motor Skills</h4>
+                                                    <p class="mt-2 text-sm text-gray-700">{{ $note->ei_gross_motor_specify ?: 'Not specified.' }}</p>
+                                                    <p class="mt-2 text-xs text-gray-500">Assistance: {{ $grossMotorAssistance ? implode(', ', $grossMotorAssistance) : 'Not recorded.' }}</p>
+                                                    <p class="mt-1 text-xs text-gray-500">Prompt/cues level: {{ $grossMotorLevels ? implode(', ', $grossMotorLevels) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Types: {{ $grossMotorTypes ? implode(', ', $grossMotorTypes) : 'Not recorded.' }}</p>
+                                                    <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_gross_motor_remarks ?: 'No remarks.' }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid gap-4 md:grid-cols-2">
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Fine Motor Skills</h4>
+                                                    <p class="mt-2 text-sm text-gray-700">{{ $note->ei_fine_motor_specify ?: 'Not specified.' }}</p>
+                                                    <p class="mt-2 text-xs text-gray-500">Assistance: {{ $fineMotorAssistance ? implode(', ', $fineMotorAssistance) : 'Not recorded.' }}</p>
+                                                    <p class="mt-1 text-xs text-gray-500">Prompt/cues level: {{ $fineMotorLevels ? implode(', ', $fineMotorLevels) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Types: {{ $fineMotorTypes ? implode(', ', $fineMotorTypes) : 'Not recorded.' }}</p>
+                                                    <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_fine_motor_remarks ?: 'No remarks.' }}</p>
+                                                </div>
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Work Behaviors</h4>
+                                                    <div class="mt-2 text-sm text-gray-700 space-y-1">
+                                                        <p>Frustration tolerance: {{ $note->ei_work_behavior_frustration_tolerance !== null ? $note->ei_work_behavior_frustration_tolerance . '%' : 'Not recorded.' }}</p>
+                                                        <p>Impulse control: {{ $note->ei_work_behavior_impulse_control !== null ? $note->ei_work_behavior_impulse_control . '%' : 'Not recorded.' }}</p>
+                                                        <p>Compliance: {{ $note->ei_work_behavior_compliance !== null ? $note->ei_work_behavior_compliance . '%' : 'Not recorded.' }}</p>
+                                                    </div>
+                                                    <p class="mt-2 text-xs text-gray-500">Assistance: {{ $workBehaviorAssistance ? implode(', ', $workBehaviorAssistance) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Prompt/cues level: {{ $workBehaviorLevels ? implode(', ', $workBehaviorLevels) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Types: {{ $workBehaviorTypes ? implode(', ', $workBehaviorTypes) : 'Not recorded.' }}</p>
+                                                    <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_work_behavior_remarks ?: 'No remarks.' }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid gap-4 md:grid-cols-2">
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Cognitive & Processing</h4>
+                                                    <div class="mt-2 flex flex-wrap gap-2">
+                                                        @foreach ($cognitiveChecklist as $label => $field)
+                                                            @if ($note?->{$field})
+                                                                <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">{{ $label }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                    <p class="mt-2 text-xs text-gray-500">Assistance: {{ $cognitiveAssistance ? implode(', ', $cognitiveAssistance) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Prompt/cues level: {{ $cognitiveLevels ? implode(', ', $cognitiveLevels) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Types: {{ $cognitiveTypes ? implode(', ', $cognitiveTypes) : 'Not recorded.' }}</p>
+                                                    <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_cognitive_remarks ?: 'No remarks.' }}</p>
+                                                </div>
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Visual Perceptual / Motor</h4>
+                                                    <div class="mt-2 flex flex-wrap gap-2">
+                                                        @foreach ($visualChecklist as $label => $field)
+                                                            @if ($note?->{$field})
+                                                                <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-semibold text-emerald-700">{{ $label }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                    <p class="mt-2 text-xs text-gray-500">Assistance: {{ $visualAssistance ? implode(', ', $visualAssistance) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Prompt/cues level: {{ $visualLevels ? implode(', ', $visualLevels) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Types: {{ $visualTypes ? implode(', ', $visualTypes) : 'Not recorded.' }}</p>
+                                                    <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_visual_remarks ?: 'No remarks.' }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid gap-4 md:grid-cols-2">
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Language & Communication</h4>
+                                                    <p class="mt-2 text-sm text-gray-700">{{ $note->ei_language_specify ?: 'Not specified.' }}</p>
+                                                    <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_language_remarks ?: 'No remarks.' }}</p>
+                                                </div>
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Play Skills</h4>
+                                                    <p class="mt-2 text-sm text-gray-700">{{ $note->ei_play_specify ?: 'Not specified.' }}</p>
+                                                    <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_play_remarks ?: 'No remarks.' }}</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @elseif ($hasEfNotes)
+                                        <div class="space-y-4">
+                                            <div class="rounded-md bg-indigo-50 p-4 text-sm text-indigo-700">
+                                                EF Session Notes were submitted for this session. Only the EF section below is displayed.
+                                            </div>
+
+                                            <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                <h4 class="text-base font-semibold text-gray-800">Sensory processing</h4>
+                                                <div class="mt-3 flex flex-wrap gap-2">
+                                                    @foreach ($efSensoryArousalLabels as $label => $field)
+                                                        @if ($note?->{$field})
+                                                            <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">Arousal {{ $label }}</span>
+                                                        @endif
+                                                    @endforeach
+
+                                                    @foreach ($efSensoryPatternLabels as $label => $field)
+                                                        @if ($note?->{$field})
+                                                            <span class="inline-flex items-center rounded-full bg-teal-100 px-3 py-0.5 text-xs font-semibold text-teal-700">Pattern {{ $label }}</span>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                                <div class="mt-3 flex flex-wrap gap-2">
+                                                    @foreach ($efRegulationSupportLabels as $label => $field)
+                                                        @if ($note?->{$field})
+                                                            <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-semibold text-yellow-700">{{ $label }}</span>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+
+                                            <div class="grid gap-4 md:grid-cols-2">
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Fine Motor Skills</h4>
+                                                    <p class="mt-2 text-sm text-gray-700">{{ $note->ef_fine_motor_specify ?: 'Not specified.' }}</p>
+                                                    <p class="mt-2 text-xs text-gray-500">Assistance: {{ $efFineMotorAssistance ? implode(', ', $efFineMotorAssistance) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Prompt/cues level: {{ $efFineMotorLevels ? implode(', ', $efFineMotorLevels) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Types: {{ $efFineMotorTypes ? implode(', ', $efFineMotorTypes) : 'Not recorded.' }}</p>
+                                                </div>
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Cognitive & Processing</h4>
+                                                    <p class="mt-2 text-sm text-gray-700">{{ $note->ef_cognitive_specify ?: 'Not specified.' }}</p>
+                                                    <p class="mt-2 text-xs text-gray-500">Assistance: {{ $efCognitiveAssistance ? implode(', ', $efCognitiveAssistance) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Prompt/cues level: {{ $efCognitiveLevels ? implode(', ', $efCognitiveLevels) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Types: {{ $efCognitiveTypes ? implode(', ', $efCognitiveTypes) : 'Not recorded.' }}</p>
+                                                </div>
+                                            </div>
+
+                                            <div class="grid gap-4 md:grid-cols-2">
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Visual Perceptual / Motor</h4>
+                                                    <div class="mt-2 flex flex-wrap gap-2">
+                                                        @foreach ($visualChecklist as $label => $field)
+                                                            @if ($note?->{$field})
+                                                                <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-semibold text-emerald-700">{{ $label }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                    <p class="mt-2 text-xs text-gray-500">Assistance: {{ $efVisualAssistance ? implode(', ', $efVisualAssistance) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Prompt/cues level: {{ $efVisualLevels ? implode(', ', $efVisualLevels) : 'Not recorded.' }}</p>
+                                                    <p class="text-xs text-gray-500">Types: {{ $efVisualTypes ? implode(', ', $efVisualTypes) : 'Not recorded.' }}</p>
+                                                </div>
+                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                    <h4 class="text-base font-semibold text-gray-800">Social Interaction</h4>
+                                                    <div class="mt-2 flex flex-wrap gap-2">
+                                                        @foreach ($efSocialLabels as $label => $field)
+                                                            @if ($note?->{$field})
+                                                                <span class="inline-flex items-center rounded-full bg-pink-100 px-3 py-0.5 text-xs font-semibold text-pink-700">{{ $label }}</span>
+                                                            @endif
+                                                        @endforeach
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                <h4 class="text-base font-semibold text-gray-800">Executive Functioning</h4>
+                                                <div class="mt-2 flex flex-wrap gap-2">
+                                                    @foreach ($efExecutiveLabels as $label => $field)
+                                                        @if ($note?->{$field})
+                                                            <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-0.5 text-xs font-semibold text-blue-700">{{ $label }}</span>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
+                                            </div>
+                                        </div>
+                                    @endif
+                                @else
+                                    <p class="text-sm text-gray-500">No detailed notes were added for this session.</p>
+                                @endif
                             </div>
-                        @elseif ($hasEfNotes)
-                            <div class="space-y-4">
-                                <div class="rounded-md bg-indigo-50 p-4 text-sm text-indigo-700">
-                                    EF Session Notes were submitted for this session. Only the EF section below is displayed.
-                                </div>
+                        </div>
 
-                                <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                    <h4 class="text-base font-semibold text-gray-800">Sensory processing</h4>
-                                    <div class="mt-3 flex flex-wrap gap-2">
-                                        @foreach ($efSensoryArousalLabels as $label => $field)
-                                            @if ($note?->{$field})
-                                                <span class="inline-flex items-center rounded-full bg-indigo-100 px-3 py-0.5 text-xs font-semibold text-indigo-700">Arousal {{ $label }}</span>
-                                            @endif
-                                        @endforeach
-
-                                        @foreach ($efSensoryPatternLabels as $label => $field)
-                                            @if ($note?->{$field})
-                                                <span class="inline-flex items-center rounded-full bg-teal-100 px-3 py-0.5 text-xs font-semibold text-teal-700">Pattern {{ $label }}</span>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                    <div class="mt-3 flex flex-wrap gap-2">
-                                        @foreach ($efRegulationSupportLabels as $label => $field)
-                                            @if ($note?->{$field})
-                                                <span class="inline-flex items-center rounded-full bg-yellow-100 px-3 py-0.5 text-xs font-semibold text-yellow-700">{{ $label }}</span>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-
-                                <div class="grid gap-4 md:grid-cols-2">
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Fine Motor Skills</h4>
-                                        <p class="mt-2 text-sm text-gray-700">{{ $note->ef_fine_motor_specify ?: 'Not specified.' }}</p>
-                                        <p class="mt-2 text-xs text-gray-500">Assistance: {{ $efFineMotorAssistance ? implode(', ', $efFineMotorAssistance) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Prompt/cues level: {{ $efFineMotorLevels ? implode(', ', $efFineMotorLevels) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Types: {{ $efFineMotorTypes ? implode(', ', $efFineMotorTypes) : 'Not recorded.' }}</p>
-                                    </div>
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Cognitive & Processing</h4>
-                                        <p class="mt-2 text-sm text-gray-700">{{ $note->ef_cognitive_specify ?: 'Not specified.' }}</p>
-                                        <p class="mt-2 text-xs text-gray-500">Assistance: {{ $efCognitiveAssistance ? implode(', ', $efCognitiveAssistance) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Prompt/cues level: {{ $efCognitiveLevels ? implode(', ', $efCognitiveLevels) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Types: {{ $efCognitiveTypes ? implode(', ', $efCognitiveTypes) : 'Not recorded.' }}</p>
-                                    </div>
-                                </div>
-
-                                <div class="grid gap-4 md:grid-cols-2">
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Visual Perceptual / Motor</h4>
-                                        <div class="mt-2 flex flex-wrap gap-2">
-                                            @foreach ($visualChecklist as $label => $field)
-                                                @if ($note?->{$field})
-                                                    <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-semibold text-emerald-700">{{ $label }}</span>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                        <p class="mt-2 text-xs text-gray-500">Assistance: {{ $efVisualAssistance ? implode(', ', $efVisualAssistance) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Prompt/cues level: {{ $efVisualLevels ? implode(', ', $efVisualLevels) : 'Not recorded.' }}</p>
-                                        <p class="text-xs text-gray-500">Types: {{ $efVisualTypes ? implode(', ', $efVisualTypes) : 'Not recorded.' }}</p>
-                                    </div>
-                                    <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                        <h4 class="text-base font-semibold text-gray-800">Social Interaction</h4>
-                                        <div class="mt-2 flex flex-wrap gap-2">
-                                            @foreach ($efSocialLabels as $label => $field)
-                                                @if ($note?->{$field})
-                                                    <span class="inline-flex items-center rounded-full bg-pink-100 px-3 py-0.5 text-xs font-semibold text-pink-700">{{ $label }}</span>
-                                                @endif
-                                            @endforeach
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                    <h4 class="text-base font-semibold text-gray-800">Executive Functioning</h4>
-                                    <div class="mt-2 flex flex-wrap gap-2">
-                                        @foreach ($efExecutiveLabels as $label => $field)
-                                            @if ($note?->{$field})
-                                                <span class="inline-flex items-center rounded-full bg-blue-100 px-3 py-0.5 text-xs font-semibold text-blue-700">{{ $label }}</span>
-                                            @endif
-                                        @endforeach
-                                    </div>
-                                </div>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            @endif
-
-            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-900">Plan</h3>
-                <p class="mt-2 text-sm text-gray-700">{{ $note?->plan ?: 'No plan was added yet.' }}</p>
+                        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                            <h3 class="text-lg font-semibold text-gray-900">Plan</h3>
+                            <p class="mt-2 text-sm text-gray-700">{{ $note?->plan ?: 'No plan was added yet.' }}</p>
+                        </div>
+                    @else
+                        <div class="rounded-lg border border-yellow-200 bg-yellow-50 p-6 shadow-sm">
+                            <p class="text-sm font-semibold text-yellow-800">Initial sessions do not include detailed notes.</p>
+                            <p class="mt-1 text-sm text-yellow-700">Only Regular sessions display the OT’s note breakdown.</p>
+                        </div>
+                @endif
             </div>
         </div>
     </div>
