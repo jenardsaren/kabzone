@@ -177,6 +177,36 @@
                             <p class="mt-2 text-sm text-gray-700">{{ $session->summary ?: 'No summary was provided yet.' }}</p>
                         </div>
                     </div>
+
+                    <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-900">Behavior Observations</h3>
+                        <p class="mt-1 text-sm text-gray-500">Captured by the OT session note to highlight how your child responded during the visit.</p>
+                        @if (!empty($behaviorObservations))
+                            <div class="mt-4 flex flex-wrap gap-2">
+                                @foreach ($behaviorObservations as $observation)
+                                    <span class="inline-flex items-center rounded-full border border-gray-200 bg-gray-50 px-3 py-1 text-sm font-medium text-gray-700">
+                                        {{ $observation }}
+                                    </span>
+                                @endforeach
+                            </div>
+                            @if ($note?->bo_other_details)
+                                <p class="mt-3 text-sm text-gray-600">
+                                    <span class="font-semibold text-gray-700">Other details:</span>
+                                    {{ $note->bo_other_details }}
+                                </p>
+                            @endif
+                        @else
+                            <p class="mt-3 text-sm text-gray-500">No observations were recorded for this session.</p>
+                        @endif
+                    </div>
+
+                    <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-900">Activities &amp; Management</h3>
+                        <p class="mt-1 text-sm text-gray-500">An overview of technique, pacing, or supports the OT used so you can follow up consistently at home.</p>
+                        <p class="mt-3 text-sm text-gray-700">
+                            {{ $note?->am_activities_and_management ?: 'No activities or management notes were recorded.' }}
+                        </p>
+                    </div>
                 @if ($session->type !== \App\Enums\SessionType::Initial)
                         <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                             <h3 class="text-lg font-semibold text-gray-900">Session Notes</h3>

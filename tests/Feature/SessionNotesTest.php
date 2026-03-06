@@ -25,6 +25,7 @@ it('only updates ef columns when note_section is ef', function (): void {
         'ef_visual_discrimination' => '1',
         'ef_visual_assistance_level_maximal' => '1',
         'ef_visual_assistance_type_physical' => '1',
+        'ef_cognitive_remarks' => '  Powered remark  ',
     ])->assertRedirect();
 
     $note = $session->refresh()->note;
@@ -37,6 +38,7 @@ it('only updates ef columns when note_section is ef', function (): void {
     expect($note->ef_visual_discrimination)->toBeTrue();
     expect($note->ef_visual_assistance_level_maximal)->toBeTrue();
     expect($note->ef_visual_assistance_type_physical)->toBeTrue();
+    expect($note->ef_cognitive_remarks)->toBe('Powered remark');
 });
 
 it('only updates ei columns when note_section is ei', function (): void {

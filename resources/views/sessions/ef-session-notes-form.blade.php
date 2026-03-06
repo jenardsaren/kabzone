@@ -84,7 +84,7 @@
     </div>
 
     <div class="space-y-4">
-        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr),minmax(0,1.5fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div class="space-y-3 border-r border-gray-100 pr-4">
                 <p class="text-sm font-semibold text-gray-700">Sensory processing</p>
 
@@ -144,9 +144,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="space-y-3 pl-4">
+                <x-input-label :for="'ef_sensory_remarks'" :value="__('Remarks')" />
+                <textarea
+                    id="ef_sensory_remarks"
+                    name="ef_sensory_remarks"
+                    rows="3"
+                    class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                >{{ old('ef_sensory_remarks', $note?->ef_sensory_remarks) }}</textarea>
+            </div>
         </div>
 
-        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr),minmax(0,1.5fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div class="space-y-3 border-r border-gray-100 pr-4">
                 <p class="text-sm font-semibold text-gray-700">Fine Motor Skills</p>
                 <p class="text-xs font-semibold uppercase text-gray-500">Specify</p>
@@ -206,9 +216,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="space-y-3 pl-4">
+                <x-input-label :for="'ef_fine_motor_remarks'" :value="__('Remarks')" />
+                <textarea
+                    id="ef_fine_motor_remarks"
+                    name="ef_fine_motor_remarks"
+                    rows="3"
+                    class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                >{{ old('ef_fine_motor_remarks', $note?->ef_fine_motor_remarks) }}</textarea>
+            </div>
         </div>
 
-        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr),minmax(0,1.5fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div class="space-y-3 border-r border-gray-100 pr-4">
                 <p class="text-sm font-semibold text-gray-700">Cognitive and Processing Skills</p>
                 <p class="text-xs font-semibold uppercase text-gray-500">Specify</p>
@@ -268,9 +288,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="space-y-3 pl-4">
+                <x-input-label :for="'ef_cognitive_remarks'" :value="__('Remarks')" />
+                <textarea
+                    id="ef_cognitive_remarks"
+                    name="ef_cognitive_remarks"
+                    rows="3"
+                    class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                >{{ old('ef_cognitive_remarks', $note?->ef_cognitive_remarks) }}</textarea>
+            </div>
         </div>
 
-        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr),minmax(0,1.5fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div class="space-y-3 border-r border-gray-100 pr-4">
                 <p class="text-sm font-semibold text-gray-700">Visual Perceptual Skills and Visual Motor Skills</p>
                 <div class="mt-2 grid gap-2 md:grid-cols-2">
@@ -338,9 +368,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="space-y-3 pl-4">
+                <x-input-label :for="'ef_visual_remarks'" :value="__('Remarks')" />
+                <textarea
+                    id="ef_visual_remarks"
+                    name="ef_visual_remarks"
+                    rows="3"
+                    class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                >{{ old('ef_visual_remarks', $note?->ef_visual_remarks) }}</textarea>
+            </div>
         </div>
 
-        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr),minmax(0,1.5fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div class="space-y-3 border-r border-gray-100 pr-4">
                 <p class="text-sm font-semibold text-gray-700">Social Interaction Skills</p>
                 <div class="mt-2 grid gap-2 md:grid-cols-2">
@@ -408,9 +448,19 @@
                     </div>
                 </div>
             </div>
+
+            <div class="space-y-3 pl-4">
+                <x-input-label :for="'ef_social_remarks'" :value="__('Remarks')" />
+                <textarea
+                    id="ef_social_remarks"
+                    name="ef_social_remarks"
+                    rows="3"
+                    class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                >{{ old('ef_social_remarks', $note?->ef_social_remarks) }}</textarea>
+            </div>
         </div>
 
-        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
+        <div class="grid gap-4 lg:grid-cols-[minmax(0,3fr),minmax(0,2fr),minmax(0,1.5fr)] rounded-lg border border-gray-200 bg-white p-4 shadow-sm">
             <div class="space-y-3 border-r border-gray-100 pr-4">
                 <p class="text-sm font-semibold text-gray-700">Executive Functioning</p>
                 <div class="mt-2 grid gap-2 md:grid-cols-2">
@@ -477,6 +527,16 @@
                         @endforeach
                     </div>
                 </div>
+            </div>
+
+            <div class="space-y-3 pl-4">
+                <x-input-label :for="'ef_executive_remarks'" :value="__('Remarks')" />
+                <textarea
+                    id="ef_executive_remarks"
+                    name="ef_executive_remarks"
+                    rows="3"
+                    class="mt-2 block w-full rounded-md border border-gray-300 bg-white px-3 py-2 text-sm text-gray-700 focus:border-indigo-500 focus:ring-indigo-500"
+                >{{ old('ef_executive_remarks', $note?->ef_executive_remarks) }}</textarea>
             </div>
         </div>
     </div>

@@ -122,8 +122,14 @@ class Note extends Model
     ];
 
     public const EF_TEXT_FIELDS = [
+        'ef_sensory_remarks',
         'ef_fine_motor_specify',
+        'ef_fine_motor_remarks',
         'ef_cognitive_specify',
+        'ef_cognitive_remarks',
+        'ef_visual_remarks',
+        'ef_social_remarks',
+        'ef_executive_remarks',
     ];
 
     public const EI_BOOLEAN_FIELDS = [

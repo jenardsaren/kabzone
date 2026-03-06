@@ -202,9 +202,10 @@
                                 </div>
                             </details>
 
+                            <!-- Beginning EI Session Notes -->
                             <details class="group p-4">
                                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                                    <span class="uppercase">EI Session Notes</span>
+                                    <span class="uppercase">Session Notes</span>
                                     <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
                                     </svg>
@@ -216,10 +217,12 @@
                                     ])
                                 </div>
                             </details>
+                            <!-- End EI Session Notes -->
 
+                            <!-- Beginning EF Session Notes -->
                             <details class="group p-4">
                                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                                    <span class="uppercase">EF Session Notes</span>
+                                    <span class="uppercase">Session Notes</span>
                                     <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
                                         <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
                                     </svg>
@@ -231,6 +234,7 @@
                                     ])
                                 </div>
                             </details>
+                            <!-- End EF Session Notes -->
 
                             <details open class="group p-4">
                                 <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
