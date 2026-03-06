@@ -11,6 +11,7 @@ use App\Models\User;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
@@ -50,8 +51,11 @@ class ClientController extends Controller
     {
         $temporaryPassword = Str::password(12);
 
+        $data = $request->validated();
+        $data['age'] = Carbon::parse($data['date_of_birth'])->age;
+
         $client = User::query()->create([
-            ...$request->validated(),
+            ...$data,
             'role' => UserRole::Client,
             'status' => UserStatus::Active,
             'password' => $temporaryPassword,
@@ -75,7 +79,10 @@ class ClientController extends Controller
 
     public function update(UpdateClientRequest $request, User $client): RedirectResponse
     {
-        $client->update($request->validated());
+        $data = $request->validated();
+        $data['age'] = Carbon::parse($data['date_of_birth'])->age;
+
+        $client->update($data);
 
         return redirect()
             ->route('front-desk.clients.edit', $client)

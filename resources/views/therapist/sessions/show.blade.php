@@ -37,6 +37,20 @@
                         <p><x-status-badge :status="$session->status" /></p>
                     </div>
                 </div>
+                <div class="mt-4 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-sm">
+                    <div>
+                        <p class="text-gray-500">Date of Birth</p>
+                        <p class="font-medium text-gray-900">{{ $session->client?->date_of_birth?->format('M d, Y') ?? '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Age</p>
+                        <p class="font-medium text-gray-900">{{ $session->client?->age ?? '—' }}</p>
+                    </div>
+                    <div class="sm:col-span-2 lg:col-span-2">
+                        <p class="text-gray-500">Parent / Guardian</p>
+                        <p class="font-medium text-gray-900">{{ $session->client?->parent_name ?? '—' }}</p>
+                    </div>
+                </div>
             </div>
 
             <div class="grid gap-6 lg:grid-cols-2">

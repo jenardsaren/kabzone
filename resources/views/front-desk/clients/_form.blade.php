@@ -69,8 +69,9 @@
             inputmode="numeric"
             class="mt-1 block w-full"
             :value="old('age', $client?->age)"
-            required
+            readonly
         />
+        <p class="mt-1 text-xs text-gray-500">Automatically calculated from the date of birth.</p>
         <x-input-error :messages="$errors->get('age')" class="mt-2" />
     </div>
 

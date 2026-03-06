@@ -37,7 +37,6 @@ class UpdateClientRequest extends FormRequest
             'contact_no' => ['required', 'string', 'max:50'],
             'gender' => ['required', Rule::in(Gender::values())],
             'date_of_birth' => ['required', 'date'],
-            'age' => ['required', 'integer', 'min:0', 'max:120'],
             'parent_name' => ['required', 'string', 'max:255'],
             'status' => ['required', Rule::in(UserStatus::values())],
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique(User::class, 'email')->ignore($client->id)],
