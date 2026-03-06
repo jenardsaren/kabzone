@@ -10,6 +10,13 @@
             </div>
 
             <div class="rounded-lg bg-white p-6 shadow-sm" x-data="{ mode: @js(old('schedule_mode', 'single')) }">
+                @php
+                    $timeSlots = [];
+                    foreach (range(8, 19) as $hour) {
+                        $timeSlots[] = sprintf('%02d:00', $hour);
+                    }
+                    $selectedTime = old('time', '08:00');
+                @endphp
                 <form method="POST" action="{{ route('front-desk.sessions.store') }}" class="space-y-4">
                     @csrf
 
@@ -22,7 +29,14 @@
 
                         <div>
                             <x-input-label for="time" :value="__('Time')" />
-                            <x-text-input id="time" name="time" type="time" class="mt-1 block w-full" step="3600" :value="old('time')" required />
+                            <select id="time" name="time" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                @foreach ($timeSlots as $slot)
+                                    <option value="{{ $slot }}" @selected($selectedTime === $slot)>
+                                        {{ \Carbon\Carbon::createFromFormat('H:i', $slot)->format('g:i A') }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            <p class="mt-1 text-xs text-gray-500">Sessions always start on the hour; minutes are fixed.</p>
                             <x-input-error :messages="$errors->get('time')" class="mt-2" />
                         </div>
 
