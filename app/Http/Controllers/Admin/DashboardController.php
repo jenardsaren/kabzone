@@ -30,6 +30,11 @@ class DashboardController extends Controller
                         $therapistQuery
                             ->where('first_name', 'like', "%{$search}%")
                             ->orWhere('last_name', 'like', "%{$search}%");
+                    })
+                    ->orWhereHas('assistant', function (Builder $assistantQuery) use ($search): void {
+                        $assistantQuery
+                            ->where('first_name', 'like', "%{$search}%")
+                            ->orWhere('last_name', 'like', "%{$search}%");
                     });
             });
         };
@@ -50,10 +55,19 @@ class DashboardController extends Controller
             ->paginate(50, ['*'], 'upcoming_page')
             ->withQueryString();
 
+        $pastSessions = Session::query()
+            ->with(['client', 'therapist', 'assistant', 'tasks'])
+            ->when($search !== '', $searchFilter)
+            ->whereDate('date', '<', $today)
+            ->recent()
+            ->paginate(50, ['*'], 'past_page')
+            ->withQueryString();
+
         return view('admin.dashboard', [
             'metrics' => $metrics,
             'todaySessions' => $todaySessions,
             'upcomingSessions' => $upcomingSessions,
+            'pastSessions' => $pastSessions,
             'search' => $search,
         ]);
     }

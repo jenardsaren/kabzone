@@ -56,7 +56,7 @@
                             type="text"
                             name="search"
                             value="{{ $search }}"
-                            placeholder="Search client or OT"
+                            placeholder="Search client or OT or KSA"
                             class="w-64 rounded-md border-gray-300 text-sm shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
                         />
                         <button type="submit" class="rounded-md bg-gray-800 px-3 py-2 text-sm font-semibold text-white hover:bg-gray-700">Search</button>
@@ -153,6 +153,56 @@
 
                 <div class="mt-4">
                     {{ $upcomingSessions->links() }}
+                </div>
+            </div>
+
+            <div class="rounded-lg bg-white p-4 shadow-sm sm:p-6">
+                <div class="mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Previous Sessions</h3>
+                    <p class="text-sm text-gray-500">Sessions that occurred before today.</p>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="min-w-full divide-y divide-gray-200 text-sm">
+                        <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                            <tr>
+                                <th class="px-3 py-2">Date</th>
+                                <th class="px-3 py-2">Time</th>
+                                <th class="px-3 py-2">Type</th>
+                                <th class="px-3 py-2">Client</th>
+                                <th class="px-3 py-2">OT</th>
+                                <th class="px-3 py-2">KSA</th>
+                                <th class="px-3 py-2">Status</th>
+                                <th class="px-3 py-2">Notes</th>
+                                <th class="px-3 py-2">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-gray-100">
+                            @forelse ($pastSessions as $session)
+                                <tr>
+                                    <td class="px-3 py-2">{{ $session->date->format('M d, Y') }}</td>
+                                    <td class="px-3 py-2">{{ $session->formatted_time }}</td>
+                                    <td class="px-3 py-2">{{ str($session->type->value)->headline() }}</td>
+                                    <td class="px-3 py-2">{{ $session->client?->full_name }}</td>
+                                    <td class="px-3 py-2">{{ $session->therapist?->full_name }}</td>
+                                    <td class="px-3 py-2">{{ $session->assistant?->full_name ?? 'Unassigned' }}</td>
+                                    <td class="px-3 py-2"><x-status-badge :status="$session->status" /></td>
+                                    <td class="px-3 py-2">{{ $session->notes ? 'Available' : 'None' }}</td>
+                                    <td class="px-3 py-2">
+                                        <a href="{{ route('admin.sessions.edit', $session) }}" class="text-indigo-600 hover:text-indigo-500">Override</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="9" class="px-3 py-6 text-center text-gray-500">No previous sessions available.</td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="mt-4">
+                    {{ $pastSessions->links() }}
                 </div>
             </div>
         </div>
