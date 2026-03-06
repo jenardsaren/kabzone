@@ -27,6 +27,7 @@ class Session extends Model
         'therapist_id',
         'assistant_id',
         'description',
+        'summary',
         'notes',
         'status',
     ];

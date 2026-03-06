@@ -91,16 +91,17 @@ it('rejects scheduling outside operating hours', function (): void {
         ->exists())->toBeFalse();
 });
 
-it('prevents therapist and client overlap for single scheduling', function (): void {
+it('allows multiple clients to share the same therapist slot', function (): void {
     signInAs(UserRole::FrontDesk, ['must_change_password' => false]);
 
-    $client = makeUser(UserRole::Client);
     $therapist = makeUser(UserRole::Therapist);
+    $firstClient = makeUser(UserRole::Client);
+    $secondClient = makeUser(UserRole::Client);
 
     Session::factory()->create([
         'date' => '2026-03-02',
         'time' => '11:00:00',
-        'client_id' => $client->id,
+        'client_id' => $firstClient->id,
         'therapist_id' => $therapist->id,
         'status' => SessionStatus::Pending,
     ]);
@@ -109,9 +110,70 @@ it('prevents therapist and client overlap for single scheduling', function (): v
         'date' => '2026-03-02',
         'time' => '11:00',
         'type' => SessionType::Regular->value,
+        'client_id' => $secondClient->id,
+        'therapist_id' => $therapist->id,
+        'description' => 'Same therapist different client',
+        'schedule_mode' => 'single',
+    ])->assertRedirect(route('front-desk.dashboard', absolute: false));
+
+    expect(Session::query()
+        ->whereDate('date', '2026-03-02')
+        ->where('time', '11:00:00')
+        ->where('therapist_id', $therapist->id)
+        ->count())->toBe(2);
+});
+
+it('prevents double booking for the same client and therapist', function (): void {
+    signInAs(UserRole::FrontDesk, ['must_change_password' => false]);
+
+    $therapist = makeUser(UserRole::Therapist);
+    $client = makeUser(UserRole::Client);
+
+    Session::factory()->create([
+        'date' => '2026-03-02',
+        'time' => '13:00:00',
         'client_id' => $client->id,
         'therapist_id' => $therapist->id,
-        'description' => 'Overlap attempt',
+        'status' => SessionStatus::Pending,
+    ]);
+
+    $this->post(route('front-desk.sessions.store'), [
+        'date' => '2026-03-02',
+        'time' => '13:00',
+        'type' => SessionType::Regular->value,
+        'client_id' => $client->id,
+        'therapist_id' => $therapist->id,
+        'description' => 'Duplicate booking attempt',
+        'schedule_mode' => 'single',
+    ])->assertSessionHasErrors('time');
+});
+
+it('prevents assistant double booking for single scheduling', function (): void {
+    signInAs(UserRole::FrontDesk, ['must_change_password' => false]);
+
+    $therapist = makeUser(UserRole::Therapist);
+    $assistant = makeUser(UserRole::Assistant);
+    $firstClient = makeUser(UserRole::Client);
+
+    Session::factory()->create([
+        'date' => '2026-03-02',
+        'time' => '12:00:00',
+        'client_id' => $firstClient->id,
+        'therapist_id' => $therapist->id,
+        'assistant_id' => $assistant->id,
+        'status' => SessionStatus::Pending,
+    ]);
+
+    $secondClient = makeUser(UserRole::Client);
+
+    $this->post(route('front-desk.sessions.store'), [
+        'date' => '2026-03-02',
+        'time' => '12:00',
+        'type' => SessionType::Regular->value,
+        'client_id' => $secondClient->id,
+        'therapist_id' => $therapist->id,
+        'assistant_id' => $assistant->id,
+        'description' => 'Assistant conflict',
         'schedule_mode' => 'single',
     ])->assertSessionHasErrors('time');
 });
@@ -143,6 +205,7 @@ it('creates repeat schedules and skips conflicted dates', function (): void {
 
     expect(Session::query()->where('client_id', $client->id)->count())->toBe(3);
     expect(Session::query()->where('client_id', $client->id)->whereDate('date', '2026-03-04')->exists())->toBeTrue();
+    expect(Session::query()->where('client_id', $client->id)->whereDate('date', '2026-03-03')->count())->toBe(1);
 });
 
 it('creates repeat weekly schedules', function (): void {

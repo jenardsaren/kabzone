@@ -90,9 +90,17 @@ class StoreSessionRequest extends FormRequest
                 $validator->errors()->add('time', 'The selected date and time are outside operating hours.');
             }
 
-            if ($this->string('schedule_mode')->toString() === 'single'
-                && $scheduler->hasConflict($date, $time, (int) $this->integer('therapist_id'), (int) $this->integer('client_id'))) {
-                $validator->errors()->add('time', 'The selected date and time conflict with an existing session.');
+            $assistantId = $this->input('assistant_id');
+            $therapistId = (int) $this->integer('therapist_id');
+            $clientId = (int) $this->integer('client_id');
+
+            if ($this->string('schedule_mode')->toString() === 'single') {
+                if ($assistantId !== null
+                    && $scheduler->hasAssistantConflict($date, $time, (int) $assistantId)) {
+                    $validator->errors()->add('time', 'The selected assistant is already booked for that time.');
+                } elseif ($scheduler->hasClientTherapistConflict($date, $time, $therapistId, $clientId)) {
+                    $validator->errors()->add('time', 'The selected client already has a session with this therapist at that time.');
+                }
             }
         });
     }

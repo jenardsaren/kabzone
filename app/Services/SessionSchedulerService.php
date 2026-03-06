@@ -35,6 +35,8 @@ class SessionSchedulerService
         $skipped = [];
 
         DB::transaction(function () use ($data, $dates, $created, &$skipped): void {
+            $assistantId = $data['assistant_id'] ?? null;
+
             foreach ($dates as $date) {
                 if (! $this->isWithinOperatingHours($date, $data['time'])) {
                     $skipped[] = [
@@ -45,7 +47,13 @@ class SessionSchedulerService
                     continue;
                 }
 
-                if ($this->hasConflict($date, $data['time'], $data['therapist_id'], $data['client_id'])) {
+                if ($this->hasConflict(
+                    $date,
+                    $data['time'],
+                    $assistantId,
+                    $data['therapist_id'],
+                    $data['client_id']
+                )) {
                     $skipped[] = [
                         'date' => $date->toDateString(),
                         'reason' => 'conflict',
@@ -83,8 +91,18 @@ class SessionSchedulerService
         });
 
         if ($data['schedule_mode'] === 'single' && $created->isEmpty()) {
+            $reason = $this->conflictReason(
+                $dates[0],
+                $data['time'],
+                $data['assistant_id'] ?? null,
+                $data['therapist_id'],
+                $data['client_id']
+            );
+
             throw ValidationException::withMessages([
-                'time' => 'The selected schedule conflicts with an existing session.',
+                'time' => $reason === 'client'
+                    ? 'The selected client already has a session with this therapist at that time.'
+                    : 'The selected assistant is already booked for that time.',
             ]);
         }
 
@@ -114,17 +132,92 @@ class SessionSchedulerService
         return $hour >= 8 && $hour <= 20;
     }
 
-    public function hasConflict(CarbonInterface $date, string $time, int $therapistId, int $clientId): bool
+    public function hasConflict(
+        CarbonInterface $date,
+        string $time,
+        ?int $assistantId,
+        ?int $therapistId = null,
+        ?int $clientId = null,
+        ?int $ignoreSessionId = null
+    ): bool
     {
-        return Session::query()
+        return $this->hasAssistantConflict($date, $time, $assistantId, $ignoreSessionId)
+            || $this->hasClientTherapistConflict(
+                $date,
+                $time,
+                $therapistId,
+                $clientId,
+                $ignoreSessionId
+            );
+    }
+
+    public function hasAssistantConflict(
+        CarbonInterface $date,
+        string $time,
+        ?int $assistantId,
+        ?int $ignoreSessionId = null
+    ): bool
+    {
+        if ($assistantId === null) {
+            return false;
+        }
+
+        $query = Session::query()
             ->whereDate('date', $date->toDateString())
             ->where('time', $this->normalizeTimeValue($time))
             ->where('status', '!=', SessionStatus::Cancelled->value)
-            ->where(function ($query) use ($therapistId, $clientId): void {
-                $query->where('therapist_id', $therapistId)
-                    ->orWhere('client_id', $clientId);
-            })
-            ->exists();
+            ->where('assistant_id', $assistantId);
+
+        if ($ignoreSessionId !== null) {
+            $query->whereKeyNot($ignoreSessionId);
+        }
+
+        return $query->exists();
+    }
+
+    public function hasClientTherapistConflict(
+        CarbonInterface $date,
+        string $time,
+        ?int $therapistId,
+        ?int $clientId,
+        ?int $ignoreSessionId = null
+    ): bool
+    {
+        if ($therapistId === null || $clientId === null) {
+            return false;
+        }
+
+        $query = Session::query()
+            ->whereDate('date', $date->toDateString())
+            ->where('time', $this->normalizeTimeValue($time))
+            ->where('status', '!=', SessionStatus::Cancelled->value)
+            ->where('therapist_id', $therapistId)
+            ->where('client_id', $clientId);
+
+        if ($ignoreSessionId !== null) {
+            $query->whereKeyNot($ignoreSessionId);
+        }
+
+        return $query->exists();
+    }
+
+    private function conflictReason(
+        CarbonInterface $date,
+        string $time,
+        ?int $assistantId,
+        ?int $therapistId,
+        ?int $clientId
+    ): string
+    {
+        if ($this->hasAssistantConflict($date, $time, $assistantId)) {
+            return 'assistant';
+        }
+
+        if ($this->hasClientTherapistConflict($date, $time, $therapistId, $clientId)) {
+            return 'client';
+        }
+
+        return 'assistant';
     }
 
     private function normalizeTimeValue(string $time): string

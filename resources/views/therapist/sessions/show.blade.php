@@ -53,7 +53,7 @@
                 </div>
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-2">
+            <div class="space-y-6">
                 <div class="rounded-lg bg-white p-6 shadow-sm">
                     <h3 class="text-lg font-semibold text-gray-900">Session Details</h3>
 
@@ -72,6 +72,12 @@
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
 
+                        <div>
+                            <x-input-label for="summary" :value="__('Summary')" />
+                            <textarea id="summary" name="summary" rows="4" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>{{ old('summary', $session->summary) }}</textarea>
+                            <x-input-error :messages="$errors->get('summary')" class="mt-2" />
+                        </div>
+
                         <div class="hidden">
                             <x-input-label for="notes" :value="__('Notes')" />
                             <textarea id="notes" name="notes" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>{{ old('notes', $session->notes) }}</textarea>
@@ -82,180 +88,182 @@
                     </form>
                 </div>
 
-                <div class="rounded-lg bg-white p-6 shadow-sm">
-                    <h3 class="text-lg font-semibold text-gray-900">Add Task</h3>
+                @unless($session->type === \App\Enums\SessionType::Initial)
+                    <div class="rounded-lg bg-white p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-900">Add Task</h3>
 
-                    <form method="POST" action="{{ route('therapist.sessions.tasks.store', $session) }}" class="mt-4 space-y-4">
-                        @csrf
+                        <form method="POST" action="{{ route('therapist.sessions.tasks.store', $session) }}" class="mt-4 space-y-4">
+                            @csrf
 
-                        <div>
-                            <x-input-label for="name" :value="__('Task Name')" />
-                            <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" required :disabled="! $isPending" />
-                            <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                            <div>
+                                <x-input-label for="name" :value="__('Task Name')" />
+                                <x-text-input id="name" name="name" type="text" class="mt-1 block w-full" :value="old('name')" required :disabled="! $isPending" />
+                                <x-input-error :messages="$errors->get('name')" class="mt-2" />
+                            </div>
+
+                            <div>
+                                <x-input-label for="task_description" :value="__('Description')" />
+                                <textarea id="task_description" name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>{{ old('description') }}</textarea>
+                                <x-input-error :messages="$errors->get('description')" class="mt-2" />
+                            </div>
+
+                            <x-primary-button :disabled="! $isPending">Add Task</x-primary-button>
+                        </form>
+
+                        <div class="mt-6">
+                            <h3 class="text-lg font-semibold text-gray-900">Tasks</h3>
+
+                            <div class="mt-4 overflow-x-auto">
+                                <table class="min-w-full divide-y divide-gray-200 text-sm">
+                                    <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
+                                        <tr>
+                                            <th class="px-3 py-2">Task</th>
+                                            <th class="px-3 py-2">Description</th>
+                                            <th class="px-3 py-2">Status</th>
+                                            <th class="px-3 py-2">Update</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="divide-y divide-gray-100">
+                                        @forelse ($session->tasks as $task)
+                                            <tr>
+                                                <td class="px-3 py-2">{{ $task->name }}</td>
+                                                <td class="px-3 py-2">{{ $task->description ?: '—' }}</td>
+                                                <td class="px-3 py-2"><x-status-badge :status="$task->status" /></td>
+                                                <td class="px-3 py-2">
+                                                    <form method="POST" action="{{ route('therapist.sessions.tasks.update', [$session, $task]) }}" class="flex items-center gap-2">
+                                                        @csrf
+                                                        @method('PATCH')
+                                                        <input type="text" name="name" value="{{ $task->name }}" class="w-40 rounded-md border-gray-300 text-xs shadow-sm" @disabled(! $isPending) required>
+                                                        <input type="text" name="description" value="{{ $task->description }}" class="w-56 rounded-md border-gray-300 text-xs shadow-sm" @disabled(! $isPending)>
+                                                        <button type="submit" class="rounded bg-gray-800 px-2 py-1 text-xs font-semibold text-white hover:bg-gray-700" @disabled(! $isPending)>
+                                                            Save
+                                                        </button>
+                                                    </form>
+                                                </td>
+                                            </tr>
+                                        @empty
+                                            <tr>
+                                                <td colspan="4" class="px-3 py-6 text-center text-gray-500">No tasks yet.</td>
+                                            </tr>
+                                        @endforelse
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+                    </div>
+                @endunless
 
-                        <div>
-                            <x-input-label for="task_description" :value="__('Description')" />
-                            <textarea id="task_description" name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>{{ old('description') }}</textarea>
-                            <x-input-error :messages="$errors->get('description')" class="mt-2" />
-                        </div>
+                @unless($session->type === \App\Enums\SessionType::Initial)
+                    <div class="rounded-lg bg-white p-6 shadow-sm">
+                        <h3 class="text-lg font-semibold text-gray-900">Session Notes</h3>
 
-                        <x-primary-button :disabled="! $isPending">Add Task</x-primary-button>
-                    </form>
-                </div>
-            </div>
-
-            <div class="rounded-lg bg-white p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-900">Tasks</h3>
-
-                <div class="mt-4 overflow-x-auto">
-                    <table class="min-w-full divide-y divide-gray-200 text-sm">
-                        <thead class="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wider text-gray-600">
-                            <tr>
-                                <th class="px-3 py-2">Task</th>
-                                <th class="px-3 py-2">Description</th>
-                                <th class="px-3 py-2">Status</th>
-                                <th class="px-3 py-2">Update</th>
-                            </tr>
-                        </thead>
-                        <tbody class="divide-y divide-gray-100">
-                            @forelse ($session->tasks as $task)
-                                <tr>
-                                    <td class="px-3 py-2">{{ $task->name }}</td>
-                                    <td class="px-3 py-2">{{ $task->description ?: '—' }}</td>
-                                    <td class="px-3 py-2"><x-status-badge :status="$task->status" /></td>
-                                    <td class="px-3 py-2">
-                                        <form method="POST" action="{{ route('therapist.sessions.tasks.update', [$session, $task]) }}" class="flex items-center gap-2">
-                                            @csrf
-                                            @method('PATCH')
-                                            <input type="text" name="name" value="{{ $task->name }}" class="w-40 rounded-md border-gray-300 text-xs shadow-sm" @disabled(! $isPending) required>
-                                            <input type="text" name="description" value="{{ $task->description }}" class="w-56 rounded-md border-gray-300 text-xs shadow-sm" @disabled(! $isPending)>
-                                            <button type="submit" class="rounded bg-gray-800 px-2 py-1 text-xs font-semibold text-white hover:bg-gray-700" @disabled(! $isPending)>
-                                                Save
-                                            </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="4" class="px-3 py-6 text-center text-gray-500">No tasks yet.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
-            <div class="rounded-lg bg-white p-6 shadow-sm">
-                <h3 class="text-lg font-semibold text-gray-900">Session Notes</h3>
-
-                <div class="mt-4 divide-y divide-gray-200 rounded-md border border-gray-200">
-                    <details open class="group p-4">
-                        <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span class="uppercase">Behavior Observations</span>
-                            <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </summary>
-                        <div class="mt-3">
-                            @include('sessions.behavior-observations-form', [
-                                'route' => route('therapist.sessions.notes.update', $session),
-                                'note' => $session->note,
-                            ])
-                        </div>
-                    </details>
-
-                    <details open class="group p-4">
-                        <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span class="uppercase">Activities and Management</span>
-                            <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </summary>
-                        <div class="mt-3">
-                            <form method="POST" action="{{ route('therapist.sessions.notes.update', $session) }}" class="space-y-3">
-                                @csrf
-                                @method('PATCH')
-                                <input type="hidden" name="note_section" value="activities">
-
-                                <x-input-label for="am_activities_and_management" :value="__('Activities and Management')" />
-                                <textarea
-                                    id="am_activities_and_management"
-                                    name="am_activities_and_management"
-                                    rows="4"
-                                    class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
-                                >{{ old('am_activities_and_management', $session->note?->am_activities_and_management) }}</textarea>
-                                <x-input-error :messages="$errors->get('am_activities_and_management')" class="mt-2" />
-
-                                <div class="flex justify-end">
-                                    <x-primary-button>Save</x-primary-button>
+                        <div class="mt-4 divide-y divide-gray-200 rounded-md border border-gray-200">
+                            <details open class="group p-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
+                                    <span class="uppercase">Behavior Observations</span>
+                                    <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </summary>
+                                <div class="mt-3">
+                                    @include('sessions.behavior-observations-form', [
+                                        'route' => route('therapist.sessions.notes.update', $session),
+                                        'note' => $session->note,
+                                    ])
                                 </div>
-                            </form>
-                        </div>
-                    </details>
+                            </details>
 
-                    <details class="group p-4">
-                        <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span class="uppercase">EI Session Notes</span>
-                            <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </summary>
-                        <div class="mt-2">
-                            @include('sessions.ei-session-notes-form', [
-                                'route' => route('therapist.sessions.notes.update', $session),
-                                'note' => $session->note,
-                            ])
-                        </div>
-                    </details>
+                            <details open class="group p-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
+                                    <span class="uppercase">Activities and Management</span>
+                                    <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </summary>
+                                <div class="mt-3">
+                                    <form method="POST" action="{{ route('therapist.sessions.notes.update', $session) }}" class="space-y-3">
+                                        @csrf
+                                        @method('PATCH')
+                                        <input type="hidden" name="note_section" value="activities">
 
-                    <details class="group p-4">
-                        <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span class="uppercase">EF Session Notes</span>
-                            <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </summary>
-                        <div class="mt-2">
-                            @include('sessions.ef-session-notes-form', [
-                                'route' => route('therapist.sessions.notes.update', $session),
-                                'note' => $session->note,
-                            ])
-                        </div>
-                    </details>
+                                        <x-input-label for="am_activities_and_management" :value="__('Activities and Management')" />
+                                        <textarea
+                                            id="am_activities_and_management"
+                                            name="am_activities_and_management"
+                                            rows="4"
+                                            class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        >{{ old('am_activities_and_management', $session->note?->am_activities_and_management) }}</textarea>
+                                        <x-input-error :messages="$errors->get('am_activities_and_management')" class="mt-2" />
 
-                    <details open class="group p-4">
-                        <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span class="uppercase">Plan</span>
-                            <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </summary>
-                        <div class="mt-2">
-                            @include('sessions.plan-form', [
-                                'route' => route('therapist.sessions.notes.update', $session),
-                                'note' => $session->note,
-                            ])
-                        </div>
-                    </details>
+                                        <div class="flex justify-end">
+                                            <x-primary-button>Save</x-primary-button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </details>
 
-                    <details open class="group p-4">
-                        <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
-                            <span class="uppercase">Approval</span>
-                            <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
-                            </svg>
-                        </summary>
-                        <div class="mt-2">
-                            @include('sessions.approval-form', [
-                                'route' => route('therapist.sessions.notes.update', $session),
-                                'note' => $session->note,
-                            ])
-                        </div>
-                    </details>
+                            <details class="group p-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
+                                    <span class="uppercase">EI Session Notes</span>
+                                    <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </summary>
+                                <div class="mt-2">
+                                    @include('sessions.ei-session-notes-form', [
+                                        'route' => route('therapist.sessions.notes.update', $session),
+                                        'note' => $session->note,
+                                    ])
+                                </div>
+                            </details>
 
-                </div>
-            </div>
+                            <details class="group p-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
+                                    <span class="uppercase">EF Session Notes</span>
+                                    <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </summary>
+                                <div class="mt-2">
+                                    @include('sessions.ef-session-notes-form', [
+                                        'route' => route('therapist.sessions.notes.update', $session),
+                                        'note' => $session->note,
+                                    ])
+                                </div>
+                            </details>
+
+                            <details open class="group p-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
+                                    <span class="uppercase">Plan</span>
+                                    <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </summary>
+                                <div class="mt-2">
+                                    @include('sessions.plan-form', [
+                                        'route' => route('therapist.sessions.notes.update', $session),
+                                        'note' => $session->note,
+                                    ])
+                                </div>
+                            </details>
+
+                            <details open class="group p-4">
+                                <summary class="flex cursor-pointer list-none items-center justify-between text-sm font-semibold text-gray-700">
+                                    <span class="uppercase">Approval</span>
+                                    <svg class="h-4 w-4 text-gray-400 transition group-open:rotate-180" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                                        <path fill-rule="evenodd" d="M5.23 7.21a.75.75 0 0 1 1.06.02L10 11.168l3.71-3.938a.75.75 0 1 1 1.08 1.04l-4.24 4.5a.75.75 0 0 1-1.08 0l-4.24-4.5a.75.75 0 0 1 .02-1.06z" clip-rule="evenodd" />
+                                    </svg>
+                                </summary>
+                                <div class="mt-2">
+                                    @include('sessions.approval-form', [
+                                        'route' => route('therapist.sessions.notes.update', $session),
+                                        'note' => $session->note,
+                                    ])
+                                </div>
+                            </details>
+                        </div>
+                    </div>
+                @endunless
 
             <div class="rounded-lg bg-white p-6 shadow-sm">
                 <h3 class="text-lg font-semibold text-gray-900">Status Transition</h3>

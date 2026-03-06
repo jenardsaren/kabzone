@@ -25,6 +25,7 @@ class UpdateSessionDetailsRequest extends FormRequest
     {
         return [
             'description' => ['nullable', 'string'],
+            'summary' => ['nullable', 'string'],
             'notes' => ['nullable', 'string'],
         ];
     }

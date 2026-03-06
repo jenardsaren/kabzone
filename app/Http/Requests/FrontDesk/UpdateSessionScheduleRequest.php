@@ -88,19 +88,14 @@ class UpdateSessionScheduleRequest extends FormRequest
                 $validator->errors()->add('time', 'The selected date and time are outside operating hours.');
             }
 
-            $hasConflict = Session::query()
-                ->whereKeyNot($session->id)
-                ->whereDate('date', $date->toDateString())
-                ->where('time', $normalizedTime)
-                ->where('status', '!=', SessionStatus::Cancelled->value)
-                ->where(function ($query): void {
-                    $query->where('therapist_id', (int) $this->integer('therapist_id'))
-                        ->orWhere('client_id', (int) $this->integer('client_id'));
-                })
-                ->exists();
+            $assistantId = $this->input('assistant_id');
+            $therapistId = (int) $this->integer('therapist_id');
+            $clientId = (int) $this->integer('client_id');
 
-            if ($hasConflict) {
-                $validator->errors()->add('time', 'The selected date and time conflict with an existing session.');
+            if ($assistantId !== null && $scheduler->hasAssistantConflict($date, $time, (int) $assistantId, $session->id)) {
+                $validator->errors()->add('time', 'The selected assistant is already booked for that time.');
+            } elseif ($scheduler->hasClientTherapistConflict($date, $time, $therapistId, $clientId, $session->id)) {
+                $validator->errors()->add('time', 'The selected client already has a session with this therapist at that time.');
             }
         });
     }
