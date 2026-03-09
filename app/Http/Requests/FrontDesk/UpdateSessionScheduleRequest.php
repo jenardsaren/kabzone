@@ -2,7 +2,6 @@
 
 namespace App\Http\Requests\FrontDesk;
 
-use App\Enums\SessionStatus;
 use App\Enums\SessionType;
 use App\Enums\UserRole;
 use App\Enums\UserStatus;
@@ -48,6 +47,7 @@ class UpdateSessionScheduleRequest extends FormRequest
             'therapist_id' => ['required', 'integer', Rule::exists('users', 'id')],
             'assistant_id' => ['nullable', 'integer', Rule::exists('users', 'id')],
             'description' => ['nullable', 'string'],
+            'payment_status' => ['nullable', Rule::in(['Paid', 'Unpaid'])],
         ];
     }
 

@@ -46,9 +46,13 @@
                         <p class="text-gray-500">Age</p>
                         <p class="font-medium text-gray-900">{{ $session->client?->age ?? '—' }}</p>
                     </div>
-                    <div class="sm:col-span-2 lg:col-span-2">
+                    <div>
                         <p class="text-gray-500">Parent / Guardian</p>
                         <p class="font-medium text-gray-900">{{ $session->client?->parent_name ?? '—' }}</p>
+                    </div>
+                    <div>
+                        <p class="text-gray-500">Payment</p>
+                        <p class="font-medium text-gray-900">{{ $session->payment_status ?: 'Unpaid' }}</p>
                     </div>
                 </div>
             </div>
@@ -103,7 +107,14 @@
 
                             <div>
                                 <x-input-label for="task_description" :value="__('Description')" />
-                                <textarea id="task_description" name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>{{ old('description') }}</textarea>
+                                <textarea id="task_description" name="description" rows="6" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" @disabled(! $isPending)>
+Toy/Materials:
+Obstacle:
+Quantity:
+Instructions:
+Prompts:
+Notes:
+                                </textarea>
                                 <x-input-error :messages="$errors->get('description')" class="mt-2" />
                             </div>
 

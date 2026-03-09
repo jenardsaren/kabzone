@@ -4,7 +4,7 @@
         <a href="{{ route('admin.sessions.edit', $session) }}" class="text-sm text-indigo-600 hover:text-indigo-500">Override</a>
     </div>
 
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 text-sm">
+    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-sm">
         <div>
             <p class="text-gray-500">Date</p>
             <p class="font-medium text-gray-900">{{ $session->date->format('M d, Y') }}</p>
@@ -32,6 +32,10 @@
         <div>
             <p class="text-gray-500">Status</p>
             <p><x-status-badge :status="$session->status" /></p>
+        </div>
+        <div>
+            <p class="text-gray-500">Payment</p>
+            <p class="font-medium text-gray-900">{{ $session->payment_status ?: 'Unpaid' }}</p>
         </div>
     </div>
 

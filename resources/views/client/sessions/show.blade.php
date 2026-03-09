@@ -140,6 +140,18 @@
     <div class="py-8">
         <div class="mx-auto max-w-5xl space-y-6 px-4 sm:px-6 lg:px-8">
             <div class="space-y-6">
+                    @if ($session->payment_status === 'Paid')
+                        <div class="rounded-lg border border-emerald-200 bg-emerald-50 p-4 shadow-sm">
+                            <div class="flex items-center gap-3 text-sm text-emerald-700">
+                                <span class="h-6 w-6 rounded-full bg-white text-emerald-600 flex items-center justify-center text-lg">✓</span>
+                                <div>
+                                    <p class="font-semibold">Payment received</p>
+                                    <p class="text-xs text-emerald-600">Thank you! The payment for this session is confirmed.</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
                         <div class="grid gap-4 sm:grid-cols-2 text-sm">
                             <div>

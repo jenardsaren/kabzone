@@ -80,6 +80,16 @@
                             <textarea id="description" name="description" rows="3" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">{{ old('description') }}</textarea>
                             <x-input-error :messages="$errors->get('description')" class="mt-2" />
                         </div>
+
+                        <div class="sm:col-span-2">
+                            <x-input-label for="payment_status" :value="__('Payment Status')" />
+                            <select id="payment_status" name="payment_status" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
+                                <option value="Unpaid" @selected(old('payment_status', 'Unpaid') === 'Unpaid')>Unpaid</option>
+                                <option value="Paid" @selected(old('payment_status') === 'Paid')>Paid</option>
+                            </select>
+                            <p class="mt-1 text-xs text-gray-500">Mark whether the session has already been paid.</p>
+                            <x-input-error :messages="$errors->get('payment_status')" class="mt-2" />
+                        </div>
                     </div>
 
                     <div>

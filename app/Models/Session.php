@@ -30,6 +30,7 @@ class Session extends Model
         'summary',
         'notes',
         'status',
+        'payment_status',
     ];
 
     /**

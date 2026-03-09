@@ -53,6 +53,10 @@
                         <p class="text-gray-500">Status</p>
                         <p><x-status-badge :status="$session->status" /></p>
                     </div>
+                    <div>
+                        <p class="text-gray-500">Payment</p>
+                        <p class="font-medium text-gray-900">{{ $session->payment_status ?: 'Unpaid' }}</p>
+                    </div>
                 </div>
 
                 <div class="mt-6 space-y-4">

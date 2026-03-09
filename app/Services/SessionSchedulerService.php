@@ -23,6 +23,7 @@ class SessionSchedulerService
      *     therapist_id: int,
      *     assistant_id?: ?int,
      *     description?: ?string,
+     *     payment_status?: string,
      *     schedule_mode: string,
      *     repeat_days?: ?int
      * } $data
@@ -70,6 +71,7 @@ class SessionSchedulerService
                     'therapist_id' => $data['therapist_id'],
                     'assistant_id' => $data['assistant_id'] ?? null,
                     'description' => $data['description'] ?? null,
+                    'payment_status' => $data['payment_status'] ?? 'Unpaid',
                     'status' => SessionStatus::Pending,
                 ]);
 
@@ -139,8 +141,7 @@ class SessionSchedulerService
         ?int $therapistId = null,
         ?int $clientId = null,
         ?int $ignoreSessionId = null
-    ): bool
-    {
+    ): bool {
         return $this->hasAssistantConflict($date, $time, $assistantId, $ignoreSessionId)
             || $this->hasClientTherapistConflict(
                 $date,
@@ -156,8 +157,7 @@ class SessionSchedulerService
         string $time,
         ?int $assistantId,
         ?int $ignoreSessionId = null
-    ): bool
-    {
+    ): bool {
         if ($assistantId === null) {
             return false;
         }
@@ -181,8 +181,7 @@ class SessionSchedulerService
         ?int $therapistId,
         ?int $clientId,
         ?int $ignoreSessionId = null
-    ): bool
-    {
+    ): bool {
         if ($therapistId === null || $clientId === null) {
             return false;
         }
@@ -207,8 +206,7 @@ class SessionSchedulerService
         ?int $assistantId,
         ?int $therapistId,
         ?int $clientId
-    ): string
-    {
+    ): string {
         if ($this->hasAssistantConflict($date, $time, $assistantId)) {
             return 'assistant';
         }
