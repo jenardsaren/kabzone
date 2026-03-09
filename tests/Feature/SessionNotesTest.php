@@ -21,6 +21,7 @@ it('only updates ef columns when note_section is ef', function (): void {
         'note_section' => 'ef',
         'ef_sensory_arousal_under' => '1',
         'ef_fine_motor_assistance_independent' => '1',
+        'ef_fine_motor_assistance_backward_chaining' => '1',
         'ef_cognitive_specify' => 'Cognitive note',
         'ef_visual_discrimination' => '1',
         'ef_visual_assistance_level_maximal' => '1',
@@ -34,6 +35,7 @@ it('only updates ef columns when note_section is ef', function (): void {
     expect($note->am_activities_and_management)->toBe('initial activities');
     expect($note->ef_sensory_arousal_under)->toBeTrue();
     expect($note->ef_fine_motor_assistance_independent)->toBeTrue();
+    expect($note->ef_fine_motor_assistance_backward_chaining)->toBeTrue();
     expect($note->ef_cognitive_specify)->toBe('Cognitive note');
     expect($note->ef_visual_discrimination)->toBeTrue();
     expect($note->ef_visual_assistance_level_maximal)->toBeTrue();

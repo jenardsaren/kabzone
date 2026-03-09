@@ -28,6 +28,7 @@
         'trial_and_error' => 'Trial and Error',
         'prompts' => 'Prompts',
         'cues' => 'Cues',
+        'backward_chaining' => 'Backward Chaining',
     ];
 
     $levelOptions = [
