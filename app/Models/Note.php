@@ -87,6 +87,7 @@ class Note extends Model
         'ef_social_replies_maintains_interaction',
         'ef_social_take_turns',
         'ef_social_show_politeness',
+        'ef_social_ask_questions',
         'ef_social_assistance_independent',
         'ef_social_assistance_hoha',
         'ef_social_assistance_model',

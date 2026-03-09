@@ -38,6 +38,7 @@
         'ef_social_replies_maintains_interaction' => 'Replies/Maintains interaction',
         'ef_social_take_turns' => 'Take turns',
         'ef_social_show_politeness' => 'Show politeness',
+        'ef_social_ask_questions' => 'Ask Questions',
     ];
 
     $executiveSkills = [

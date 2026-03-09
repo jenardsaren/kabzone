@@ -94,6 +94,7 @@
             'Replies / Maintains interaction' => 'ef_social_replies_maintains_interaction',
             'Take turns' => 'ef_social_take_turns',
             'Show politeness' => 'ef_social_show_politeness',
+            'Ask Questions' => 'ef_social_ask_questions',
         ];
         $efExecutiveLabels = [
             'Response Inhibition' => 'ef_executive_response_inhibition',
