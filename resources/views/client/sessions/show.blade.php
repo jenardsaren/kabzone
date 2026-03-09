@@ -145,8 +145,8 @@
                             <div class="flex items-center gap-3 text-sm text-emerald-700">
                                 <span class="h-6 w-6 rounded-full bg-white text-emerald-600 flex items-center justify-center text-lg">✓</span>
                                 <div>
-                                    <p class="font-semibold">Payment received</p>
-                                    <p class="text-xs text-emerald-600">Thank you! The payment for this session is confirmed.</p>
+                                    <p class="font-semibold">Payment Confirmation</p>
+                                    <p class="text-s text-emerald-600">Thank you. Your payment has been successfully received. This message serves as an <strong>Acknowledgement of Payment</strong> for your selected session at <strong>KABZONE – Kids Ability Builder Zone</strong>.</p>
                                 </div>
                             </div>
                         </div>
