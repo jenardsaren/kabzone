@@ -69,6 +69,17 @@
             'Spatial Relations' => 'ei_visual_spatial_relations',
             'Figure Ground' => 'ei_visual_figure_ground',
             'Visual Closure' => 'ei_visual_closure',
+            'Visual Motor' => 'ei_visual_motor',
+        ];
+        $efVisualChecklist = [
+            'Visual Discrimination' => 'ef_visual_discrimination',
+            'Form Constancy' => 'ef_visual_form_constancy',
+            'Visual Memory' => 'ef_visual_memory',
+            'Visual Sequential Memory' => 'ef_visual_sequential_memory',
+            'Spatial Relations' => 'ef_visual_spatial_relations',
+            'Figure Ground' => 'ef_visual_figure_ground',
+            'Visual Closure' => 'ef_visual_closure',
+            'Visual Motor' => 'ef_visual_motor',
         ];
         $efSensoryArousalLabels = [
             'Under' => 'ef_sensory_arousal_under',
@@ -305,15 +316,15 @@
                                                     <p class="text-xs text-gray-500">Types: {{ $cognitiveTypes ? implode(', ', $cognitiveTypes) : 'Not recorded.' }}</p>
                                                     <p class="mt-3 text-xs text-gray-600 italic">{{ $note->ei_cognitive_remarks ?: 'No remarks.' }}</p>
                                                 </div>
-                                                <div class="rounded-lg border border-gray-200 bg-white p-4">
-                                                    <h4 class="text-base font-semibold text-gray-800">Visual Perceptual / Motor</h4>
-                                                    <div class="mt-2 flex flex-wrap gap-2">
-                                                        @foreach ($visualChecklist as $label => $field)
-                                                            @if ($note?->{$field})
-                                                                <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-semibold text-emerald-700">{{ $label }}</span>
-                                                            @endif
-                                                        @endforeach
-                                                    </div>
+                                            <div class="rounded-lg border border-gray-200 bg-white p-4">
+                                                <h4 class="text-base font-semibold text-gray-800">Visual Perceptual / Motor</h4>
+                                                <div class="mt-2 flex flex-wrap gap-2">
+                                                    @foreach ($efVisualChecklist as $label => $field)
+                                                        @if ($note?->{$field})
+                                                            <span class="inline-flex items-center rounded-full bg-emerald-100 px-3 py-0.5 text-xs font-semibold text-emerald-700">{{ $label }}</span>
+                                                        @endif
+                                                    @endforeach
+                                                </div>
                                                     <p class="mt-2 text-xs text-gray-500">Assistance: {{ $visualAssistance ? implode(', ', $visualAssistance) : 'Not recorded.' }}</p>
                                                     <p class="text-xs text-gray-500">Prompt/cues level: {{ $visualLevels ? implode(', ', $visualLevels) : 'Not recorded.' }}</p>
                                                     <p class="text-xs text-gray-500">Types: {{ $visualTypes ? implode(', ', $visualTypes) : 'Not recorded.' }}</p>

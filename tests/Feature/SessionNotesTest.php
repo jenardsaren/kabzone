@@ -24,6 +24,7 @@ it('only updates ef columns when note_section is ef', function (): void {
         'ef_fine_motor_assistance_backward_chaining' => '1',
         'ef_cognitive_specify' => 'Cognitive note',
         'ef_visual_discrimination' => '1',
+        'ef_visual_motor' => '1',
         'ef_visual_assistance_level_maximal' => '1',
         'ef_visual_assistance_type_physical' => '1',
         'ef_cognitive_remarks' => '  Powered remark  ',
@@ -39,6 +40,7 @@ it('only updates ef columns when note_section is ef', function (): void {
     expect($note->ef_fine_motor_assistance_backward_chaining)->toBeTrue();
     expect($note->ef_cognitive_specify)->toBe('Cognitive note');
     expect($note->ef_visual_discrimination)->toBeTrue();
+    expect($note->ef_visual_motor)->toBeTrue();
     expect($note->ef_visual_assistance_level_maximal)->toBeTrue();
     expect($note->ef_visual_assistance_type_physical)->toBeTrue();
     expect($note->ef_cognitive_remarks)->toBe('Powered remark');
@@ -64,6 +66,7 @@ it('only updates ei columns when note_section is ei', function (): void {
         'note_section' => 'ei',
         'ei_work_behavior_frustration_tolerance' => '85',
         'ei_visual_discrimination' => '1',
+        'ei_visual_motor' => '1',
         'ei_cognitive_msri' => '1',
         'ei_language_specify' => 'Language detail',
         'ei_play_specify' => 'Play detail',
@@ -76,6 +79,7 @@ it('only updates ei columns when note_section is ei', function (): void {
     expect($note->ef_visual_discrimination)->toBeFalse();
     expect($note->ei_work_behavior_frustration_tolerance)->toBe(85);
     expect($note->ei_visual_discrimination)->toBeTrue();
+    expect($note->ei_visual_motor)->toBeTrue();
     expect($note->ei_cognitive_msri)->toBeTrue();
     expect($note->ei_language_specify)->toBe('Language detail');
     expect($note->ei_play_specify)->toBe('Play detail');

@@ -60,6 +60,7 @@
         'ei_visual_spatial_relations' => 'Spatial Relations',
         'ei_visual_figure_ground' => 'Figure Ground',
         'ei_visual_closure' => 'Visual Closure',
+        'ei_visual_motor' => 'Visual Motor',
     ];
 @endphp
 

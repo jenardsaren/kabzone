@@ -29,6 +29,7 @@
         'ef_visual_spatial_relations' => 'Spatial Relations',
         'ef_visual_figure_ground' => 'Figure Ground',
         'ef_visual_closure' => 'Visual Closure',
+        'ef_visual_motor' => 'Visual Motor',
     ];
 
     $socialSkills = [
