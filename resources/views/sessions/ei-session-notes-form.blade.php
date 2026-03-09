@@ -247,7 +247,10 @@
                 <div class="rounded-lg border border-gray-100 bg-gray-50 p-3 text-sm">
                     <p class="font-semibold text-gray-700">Assistance</p>
                     <div class="mt-2 flex flex-wrap gap-2">
-                        @foreach ($assistanceOptions as $suffix => $label)
+                        @php
+                            $workBehaviorAssistanceOptions = \Illuminate\Support\Arr::only($assistanceOptions, ['independent', 'prompts', 'cues']);
+                        @endphp
+                        @foreach ($workBehaviorAssistanceOptions as $suffix => $label)
                             <label class="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1 text-sm font-medium text-gray-700">
                                 <input
                                     type="checkbox"

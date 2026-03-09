@@ -71,6 +71,8 @@
         'visual' => 'Visual',
         'verbal' => 'Verbal',
     ];
+
+    $assistanceOptionsWithoutHoha = \Illuminate\Support\Arr::except($assistanceOptions, ['hoha']);
 @endphp
 
 <form method="POST" action="{{ $route }}" class="space-y-4">
@@ -243,7 +245,7 @@
                 <div class="rounded-lg border border-gray-100 bg-gray-50 p-3 text-sm">
                     <p class="font-semibold text-gray-700">Assistance</p>
                     <div class="mt-2 flex flex-wrap gap-2">
-                        @foreach ($assistanceOptions as $suffix => $label)
+                        @foreach ($assistanceOptionsWithoutHoha as $suffix => $label)
                             <label class="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1 text-sm font-medium text-gray-700">
                                 <input
                                     type="checkbox"
@@ -403,7 +405,7 @@
                 <div class="rounded-lg border border-gray-100 bg-gray-50 p-3 text-sm">
                     <p class="font-semibold text-gray-700">Assistance</p>
                     <div class="mt-2 flex flex-wrap gap-2">
-                        @foreach ($assistanceOptions as $suffix => $label)
+                        @foreach ($assistanceOptionsWithoutHoha as $suffix => $label)
                             <label class="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1 text-sm font-medium text-gray-700">
                                 <input
                                     type="checkbox"
@@ -483,7 +485,7 @@
                 <div class="rounded-lg border border-gray-100 bg-gray-50 p-3 text-sm">
                     <p class="font-semibold text-gray-700">Assistance</p>
                     <div class="mt-2 flex flex-wrap gap-2">
-                        @foreach ($assistanceOptions as $suffix => $label)
+                        @foreach ($assistanceOptionsWithoutHoha as $suffix => $label)
                             <label class="inline-flex items-center gap-2 rounded-md border border-gray-200 bg-white px-3 py-1 text-sm font-medium text-gray-700">
                                 <input
                                     type="checkbox"
