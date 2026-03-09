@@ -226,7 +226,7 @@
                                 @if ($hasEiNotes || $hasEfNotes)
                                     @if ($hasEiNotes)
                                         <div class="space-y-4">
-                                            <div class="rounded-md bg-indigo-50 p-4 text-sm text-indigo-700">
+                                            <div class="hidden rounded-md bg-indigo-50 p-4 text-sm text-indigo-700">
                                                 EI Session Notes were submitted for this session. Only the EI section below is displayed.
                                             </div>
 
@@ -335,7 +335,7 @@
                                         </div>
                                     @elseif ($hasEfNotes)
                                         <div class="space-y-4">
-                                            <div class="rounded-md bg-indigo-50 p-4 text-sm text-indigo-700">
+                                            <div class="hidden rounded-md bg-indigo-50 p-4 text-sm text-indigo-700">
                                                 EF Session Notes were submitted for this session. Only the EF section below is displayed.
                                             </div>
 

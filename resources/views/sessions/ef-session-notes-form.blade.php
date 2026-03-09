@@ -542,6 +542,6 @@
     </div>
 
     <div class="flex justify-end">
-        <x-primary-button>Save EF Notes</x-primary-button>
+        <x-primary-button>Save Notes</x-primary-button>
     </div>
 </form>
