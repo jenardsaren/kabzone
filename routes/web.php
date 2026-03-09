@@ -73,6 +73,7 @@ Route::middleware(['auth', 'password.changed', 'role:therapist'])->prefix('thera
     Route::patch('sessions/{session}/status', [TherapistSessionController::class, 'updateStatus'])->name('sessions.status.update');
     Route::post('sessions/{session}/tasks', [TherapistSessionController::class, 'storeTask'])->name('sessions.tasks.store');
     Route::patch('sessions/{session}/tasks/{task}', [TherapistSessionController::class, 'updateTask'])->name('sessions.tasks.update');
+    Route::delete('sessions/{session}/tasks/{task}', [TherapistSessionController::class, 'destroyTask'])->name('sessions.tasks.destroy');
     Route::patch('sessions/{session}/notes', [SessionNoteController::class, 'update'])->name('sessions.notes.update');
 });
 

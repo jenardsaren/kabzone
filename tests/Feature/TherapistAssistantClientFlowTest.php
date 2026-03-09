@@ -42,6 +42,55 @@ it('allows therapist to complete when assistant assigned without tasks', functio
     expect($session->refresh()->status->value)->toBe(SessionStatus::Completed->value);
 });
 
+it('allows therapist to delete own session task', function (): void {
+    $therapist = signInAs(UserRole::Therapist, ['must_change_password' => false]);
+    $client = makeUser(UserRole::Client);
+
+    $session = Session::factory()->create([
+        'therapist_id' => $therapist->id,
+        'client_id' => $client->id,
+    ]);
+
+    $task = $session->tasks()->create([
+        'name' => 'Sample',
+        'description' => 'Desc',
+    ]);
+
+    $otherSession = Session::factory()->create([
+        'therapist_id' => $therapist->id,
+        'client_id' => makeUser(UserRole::Client)->id,
+    ]);
+
+    $this->delete(route('therapist.sessions.tasks.destroy', [$session, $task]))
+        ->assertRedirect(route('therapist.sessions.show', $session));
+
+    expect($session->tasks()->count())->toBe(0);
+
+    $this->delete(route('therapist.sessions.tasks.destroy', [$otherSession, $task]))
+        ->assertNotFound();
+});
+
+it('generates readable temporary passwords for new clients', function (): void {
+    signInAs(UserRole::FrontDesk);
+
+    $response = $this->post(route('front-desk.clients.store'), [
+        'first_name' => 'Jane',
+        'last_name' => 'Doe',
+        'email' => 'jane@example.com',
+        'date_of_birth' => '2010-01-01',
+        'contact' => '1234567890',
+        'address' => '123 Street',
+        'parent_name' => 'Parent Doe',
+    ]);
+
+    $response->assertRedirect();
+
+    $tempPassword = session('temporary_password');
+
+    expect($tempPassword)->toMatch('/^[a-z]{4}\\d{4}$/');
+    expect(strlen($tempPassword))->toBe(8);
+});
+
 it('allows therapist to complete when assistant and tasks exist', function (): void {
     $therapist = signInAs(UserRole::Therapist, ['must_change_password' => false]);
     $assistant = makeUser(UserRole::Assistant);

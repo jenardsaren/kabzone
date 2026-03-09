@@ -49,7 +49,7 @@ class ClientController extends Controller
 
     public function store(StoreClientRequest $request): RedirectResponse
     {
-        $temporaryPassword = Str::password(12);
+        $temporaryPassword = $this->makeReadableTempPassword();
 
         $data = $request->validated();
         $data['age'] = Carbon::parse($data['date_of_birth'])->age;
@@ -66,6 +66,14 @@ class ClientController extends Controller
             ->route('front-desk.clients.edit', $client)
             ->with('status', 'client-created')
             ->with('temporary_password', $temporaryPassword);
+    }
+
+    private function makeReadableTempPassword(): string
+    {
+        $letters = Str::lower(Str::random(4, 'abcdefghijklmnopqrstuvwxyz'));
+        $numbers = str_pad((string) random_int(0, 9999), 4, '0', STR_PAD_LEFT);
+
+        return $letters.$numbers;
     }
 
     public function edit(User $client): View

@@ -76,6 +76,24 @@ class SessionController extends Controller
             ->with('status', 'task-updated');
     }
 
+    public function destroyTask(
+        Session $session,
+        Task $task,
+        SessionLockService $sessionLockService
+    ): RedirectResponse {
+        if ($task->session_id !== $session->id) {
+            abort(404);
+        }
+
+        $sessionLockService->ensureEditable($session);
+
+        $task->delete();
+
+        return redirect()
+            ->route('therapist.sessions.show', $session)
+            ->with('status', 'task-deleted');
+    }
+
     public function updateStatus(UpdateSessionStatusRequest $request, Session $session): RedirectResponse
     {
         $session->update([

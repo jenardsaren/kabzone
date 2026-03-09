@@ -131,7 +131,7 @@ Notes:
                                             <th class="px-3 py-2">Task</th>
                                             <th class="px-3 py-2">Description</th>
                                             <th class="px-3 py-2">Status</th>
-                                            <th class="px-3 py-2">Update</th>
+                                            <th class="px-3 py-2">Actions</th>
                                         </tr>
                                     </thead>
                                     <tbody class="divide-y divide-gray-100">
@@ -148,6 +148,13 @@ Notes:
                                                         <input type="text" name="description" value="{{ $task->description }}" class="w-56 rounded-md border-gray-300 text-xs shadow-sm" @disabled(! $isPending)>
                                                         <button type="submit" class="rounded bg-gray-800 px-2 py-1 text-xs font-semibold text-white hover:bg-gray-700" @disabled(! $isPending)>
                                                             Save
+                                                        </button>
+                                                    </form>
+                                                    <form method="POST" action="{{ route('therapist.sessions.tasks.destroy', [$session, $task]) }}" class="mt-2 inline-flex">
+                                                        @csrf
+                                                        @method('DELETE')
+                                                        <button type="submit" class="rounded bg-red-600 px-2 py-1 text-xs font-semibold text-white hover:bg-red-500" @disabled(! $isPending) onclick="return confirm('Delete this task?')">
+                                                            Delete
                                                         </button>
                                                     </form>
                                                 </td>

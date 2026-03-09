@@ -9,13 +9,19 @@
                 Operating hours: Mon-Fri 8:00 AM-8:00 PM, Sun 1:00 PM-8:00 PM, Sat closed. Sessions are hourly slots.
             </div>
 
-            <div class="rounded-lg bg-white p-6 shadow-sm" x-data="{ mode: @js(old('schedule_mode', 'single')) }">
+            <div class="rounded-lg bg-white p-6 shadow-sm" x-data="{ mode: @js(old('schedule_mode', 'single')), ...comboboxSetup() }">
                 @php
                     $timeSlots = [];
                     foreach (range(8, 19) as $hour) {
                         $timeSlots[] = sprintf('%02d:00', $hour);
                     }
                     $selectedTime = old('time', '08:00');
+
+                    $therapistOptions = $therapists->map(fn ($t) => ['id' => $t->id, 'label' => $t->full_name])->values();
+                    $assistantOptions = collect([['id' => '', 'label' => 'Unassigned']])
+                        ->merge($assistants->map(fn ($a) => ['id' => $a->id, 'label' => $a->full_name]))
+                        ->values();
+                    $clientOptions = $clients->map(fn ($c) => ['id' => $c->id, 'label' => $c->full_name])->values();
                 @endphp
                 <form method="POST" action="{{ route('front-desk.sessions.store') }}" class="space-y-4">
                     @csrf
@@ -51,40 +57,145 @@
 
                         <div>
                             <x-input-label for="therapist_id" :value="__('OT')" />
-                            <select id="therapist_id" name="therapist_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                                <option value="">Select OT</option>
-                                @foreach ($therapists as $therapist)
-                                    <option value="{{ $therapist->id }}" @selected((int) old('therapist_id') === $therapist->id)>
-                                        {{ $therapist->full_name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="relative" x-data="comboboxField({ options: @js($therapistOptions), initialId: @js(old('therapist_id')), placeholder: 'Select OT' })" @click.away="open = false">
+                                <input type="hidden" name="therapist_id" x-model="selectedId" required>
+                                <div class="relative">
+                                    <input
+                                        type="text"
+                                        x-model="search"
+                                        @focus="open = true; filter()"
+                                        @input="filter()"
+                                        @keydown.arrow-down.prevent="highlightNext()"
+                                        @keydown.arrow-up.prevent="highlightPrev()"
+                                        @keydown.enter.prevent="selectHighlighted()"
+                                        @keydown.escape="open = false"
+                                        placeholder="Select OT"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        aria-autocomplete="list"
+                                        :aria-expanded="open"
+                                    >
+                                    <button type="button" x-show="selectedId" @click="clear()" class="absolute inset-y-0 right-2 text-gray-400 hover:text-gray-600" aria-label="Clear selection">
+                                        &times;
+                                    </button>
+                                </div>
+                                <div
+                                    x-show="open"
+                                    x-cloak
+                                    class="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg"
+                                    @mousedown.prevent
+                                >
+                                    <ul class="max-h-48 overflow-y-auto text-sm">
+                                        <template x-for="(option, index) in filtered" :key="option.id">
+                                            <li>
+                                                <button
+                                                    type="button"
+                                                    @click="select(option)"
+                                                    :class="['w-full text-left px-3 py-2 hover:bg-gray-100', highlightedIndex === index ? 'bg-gray-100' : '']"
+                                                >
+                                                    <span x-text="option.label"></span>
+                                                </button>
+                                            </li>
+                                        </template>
+                                        <li x-show="!filtered.length" class="px-3 py-2 text-xs text-gray-500">No results</li>
+                                    </ul>
+                                </div>
+                            </div>
                             <x-input-error :messages="$errors->get('therapist_id')" class="mt-2" />
                         </div>
 
                         <div class="sm:col-span-2">
                             <x-input-label for="assistant_id" :value="__('KSA')" />
-                            <select id="assistant_id" name="assistant_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500">
-                                <option value="">Unassigned</option>
-                                @foreach ($assistants as $assistant)
-                                    <option value="{{ $assistant->id }}" @selected(old('assistant_id') == $assistant->id)>
-                                        {{ $assistant->full_name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="relative" x-data="comboboxField({ options: @js($assistantOptions), initialId: @js(old('assistant_id')), placeholder: 'Unassigned' })" @click.away="open = false">
+                                <input type="hidden" name="assistant_id" x-model="selectedId">
+                                <div class="relative">
+                                    <input
+                                        type="text"
+                                        x-model="search"
+                                        @focus="open = true; filter()"
+                                        @input="filter()"
+                                        @keydown.arrow-down.prevent="highlightNext()"
+                                        @keydown.arrow-up.prevent="highlightPrev()"
+                                        @keydown.enter.prevent="selectHighlighted()"
+                                        @keydown.escape="open = false"
+                                        placeholder="Unassigned"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        aria-autocomplete="list"
+                                        :aria-expanded="open"
+                                    >
+                                    <button type="button" x-show="selectedId" @click="clear()" class="absolute inset-y-0 right-2 text-gray-400 hover:text-gray-600" aria-label="Clear selection">
+                                        &times;
+                                    </button>
+                                </div>
+                                <div
+                                    x-show="open"
+                                    x-cloak
+                                    class="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg"
+                                    @mousedown.prevent
+                                >
+                                    <ul class="max-h-48 overflow-y-auto text-sm">
+                                        <template x-for="(option, index) in filtered" :key="option.id + '-assistant'">
+                                            <li>
+                                                <button
+                                                    type="button"
+                                                    @click="select(option)"
+                                                    :class="['w-full text-left px-3 py-2 hover:bg-gray-100', highlightedIndex === index ? 'bg-gray-100' : '']"
+                                                >
+                                                    <span x-text="option.label"></span>
+                                                </button>
+                                            </li>
+                                        </template>
+                                        <li x-show="!filtered.length" class="px-3 py-2 text-xs text-gray-500">No results</li>
+                                    </ul>
+                                </div>
+                            </div>
                             <x-input-error :messages="$errors->get('assistant_id')" class="mt-2" />
                         </div>
 
                         <div class="sm:col-span-2">
                             <x-input-label for="client_id" :value="__('Client')" />
-                            <select id="client_id" name="client_id" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500" required>
-                                <option value="">Select client</option>
-                                @foreach ($clients as $client)
-                                    <option value="{{ $client->id }}" @selected((int) old('client_id') === $client->id)>
-                                        {{ $client->full_name }}
-                                    </option>
-                                @endforeach
-                            </select>
+                            <div class="relative" x-data="comboboxField({ options: @js($clientOptions), initialId: @js(old('client_id')), placeholder: 'Select client' })" @click.away="open = false">
+                                <input type="hidden" name="client_id" x-model="selectedId" required>
+                                <div class="relative">
+                                    <input
+                                        type="text"
+                                        x-model="search"
+                                        @focus="open = true; filter()"
+                                        @input="filter()"
+                                        @keydown.arrow-down.prevent="highlightNext()"
+                                        @keydown.arrow-up.prevent="highlightPrev()"
+                                        @keydown.enter.prevent="selectHighlighted()"
+                                        @keydown.escape="open = false"
+                                        placeholder="Select client"
+                                        class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                                        aria-autocomplete="list"
+                                        :aria-expanded="open"
+                                    >
+                                    <button type="button" x-show="selectedId" @click="clear()" class="absolute inset-y-0 right-2 text-gray-400 hover:text-gray-600" aria-label="Clear selection">
+                                        &times;
+                                    </button>
+                                </div>
+                                <div
+                                    x-show="open"
+                                    x-cloak
+                                    class="absolute z-10 mt-1 w-full rounded-md border border-gray-200 bg-white shadow-lg"
+                                    @mousedown.prevent
+                                >
+                                    <ul class="max-h-48 overflow-y-auto text-sm">
+                                        <template x-for="(option, index) in filtered" :key="option.id + '-client'">
+                                            <li>
+                                                <button
+                                                    type="button"
+                                                    @click="select(option)"
+                                                    :class="['w-full text-left px-3 py-2 hover:bg-gray-100', highlightedIndex === index ? 'bg-gray-100' : '']"
+                                                >
+                                                    <span x-text="option.label"></span>
+                                                </button>
+                                            </li>
+                                        </template>
+                                        <li x-show="!filtered.length" class="px-3 py-2 text-xs text-gray-500">No results</li>
+                                    </ul>
+                                </div>
+                            </div>
                             <x-input-error :messages="$errors->get('client_id')" class="mt-2" />
                         </div>
 
@@ -147,4 +258,70 @@
             </div>
         </div>
     </div>
+
+    <script>
+        document.addEventListener('alpine:init', () => {
+            window.comboboxSetup = () => ({});
+
+            Alpine.data('comboboxField', ({ options, initialId = '', placeholder = '' }) => ({
+                options,
+                filtered: options,
+                search: '',
+                selectedId: initialId ?? '',
+                open: false,
+                highlightedIndex: 0,
+
+                init() {
+                    const current = this.options.find((option) => option.id == this.selectedId);
+
+                    if (current) {
+                        this.search = current.label;
+                    }
+                },
+
+                filter() {
+                    const term = this.search.toLowerCase();
+                    this.filtered = this.options.filter((option) => option.label.toLowerCase().includes(term));
+                    this.highlightedIndex = 0;
+                    this.open = true;
+                },
+
+                highlightNext() {
+                    if (!this.filtered.length) {
+                        return;
+                    }
+
+                    this.highlightedIndex = (this.highlightedIndex + 1) % this.filtered.length;
+                },
+
+                highlightPrev() {
+                    if (!this.filtered.length) {
+                        return;
+                    }
+
+                    this.highlightedIndex = (this.highlightedIndex - 1 + this.filtered.length) % this.filtered.length;
+                },
+
+                selectHighlighted() {
+                    if (!this.filtered.length) {
+                        return;
+                    }
+
+                    this.select(this.filtered[this.highlightedIndex]);
+                },
+
+                select(option) {
+                    this.selectedId = option.id;
+                    this.search = option.label;
+                    this.open = false;
+                },
+
+                clear() {
+                    this.selectedId = '';
+                    this.search = '';
+                    this.filtered = this.options;
+                },
+            }));
+        });
+    </script>
 </x-app-layout>
