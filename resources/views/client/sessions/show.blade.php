@@ -115,6 +115,7 @@
             'Planning & Organizing' => 'ef_executive_planning_organizing',
             'Task Monitoring' => 'ef_executive_task_monitoring',
             'Emotional Regulation' => 'ef_executive_emotional_regulation',
+            'Time Management' => 'ef_executive_time_management',
         ];
         $collectFlags = fn (string $prefix, array $map) => $note
             ? collect($map)

@@ -50,6 +50,7 @@
         'ef_executive_planning_organizing' => 'Planning and Organizing',
         'ef_executive_task_monitoring' => 'Task Monitoring',
         'ef_executive_emotional_regulation' => 'Emotional Regulation',
+        'ef_executive_time_management' => 'Time Management',
     ];
 
     $assistanceOptions = [

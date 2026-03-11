@@ -109,6 +109,7 @@ class Note extends Model
         'ef_executive_planning_organizing',
         'ef_executive_task_monitoring',
         'ef_executive_emotional_regulation',
+        'ef_executive_time_management',
         'ef_executive_assistance_independent',
         'ef_executive_assistance_hoha',
         'ef_executive_assistance_model',

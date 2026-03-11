@@ -29,6 +29,7 @@ it('only updates ef columns when note_section is ef', function (): void {
         'ef_visual_assistance_type_physical' => '1',
         'ef_cognitive_remarks' => '  Powered remark  ',
         'ef_social_ask_questions' => '1',
+        'ef_executive_time_management' => '1',
     ])->assertRedirect();
 
     $note = $session->refresh()->note;
@@ -45,6 +46,7 @@ it('only updates ef columns when note_section is ef', function (): void {
     expect($note->ef_visual_assistance_type_physical)->toBeTrue();
     expect($note->ef_cognitive_remarks)->toBe('Powered remark');
     expect($note->ef_social_ask_questions)->toBeTrue();
+    expect($note->ef_executive_time_management)->toBeTrue();
 });
 
 it('only updates ei columns when note_section is ei', function (): void {
